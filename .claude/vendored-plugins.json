@@ -1,0 +1,189 @@
+{
+  "plugins": [
+    {
+      "name": "superpowers",
+      "version": "7.0.0",
+      "skills": [
+        "brainstorming",
+        "diagnosing-superpowers",
+        "dispatching-parallel-agents",
+        "executing-plans",
+        "finishing-a-development-branch",
+        "receiving-code-review",
+        "requesting-code-review",
+        "subagent-driven-development",
+        "systematic-debugging",
+        "test-driven-development",
+        "using-git-worktrees",
+        "using-superpowers",
+        "verification-before-completion",
+        "writing-plans",
+        "writing-skills"
+      ],
+      "agents": []
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "version": "2.6.2",
+      "skills": [
+        "banner-design",
+        "brand",
+        "design",
+        "design-system",
+        "slides",
+        "ui-styling",
+        "ui-ux-pro-max"
+      ],
+      "agents": []
+    },
+    {
+      "name": "marketing-skills",
+      "version": "2.6.0",
+      "skills": [
+        "ab-testing",
+        "ad-creative",
+        "ads",
+        "ai-seo",
+        "analytics",
+        "aso",
+        "churn-prevention",
+        "co-marketing",
+        "cold-email",
+        "community-marketing",
+        "competitor-profiling",
+        "competitors",
+        "content-strategy",
+        "copy-editing",
+        "copywriting",
+        "cro",
+        "customer-research",
+        "directory-submissions",
+        "emails",
+        "free-tools",
+        "image",
+        "launch",
+        "lead-magnets",
+        "marketing-council",
+        "marketing-ideas",
+        "marketing-loops",
+        "marketing-plan",
+        "marketing-psychology",
+        "offers",
+        "onboarding",
+        "paywalls",
+        "popups",
+        "pricing",
+        "product-marketing",
+        "programmatic-seo",
+        "prospecting",
+        "public-relations",
+        "referrals",
+        "revops",
+        "sales-enablement",
+        "schema",
+        "seo-audit",
+        "signup",
+        "site-architecture",
+        "sms",
+        "social",
+        "video"
+      ],
+      "agents": []
+    },
+    {
+      "name": "content-marketing",
+      "version": "1.2.1",
+      "skills": [],
+      "agents": [
+        "content-marketer.md",
+        "search-specialist.md"
+      ]
+    },
+    {
+      "name": "seo-content-creation",
+      "version": "1.2.1",
+      "skills": [],
+      "agents": [
+        "seo-content-auditor.md",
+        "seo-content-planner.md",
+        "seo-content-writer.md"
+      ]
+    },
+    {
+      "name": "social-publishing",
+      "version": "1.0.0",
+      "skills": [
+        "social-publishing"
+      ],
+      "agents": [
+        "social-publishing-publisher.md"
+      ]
+    },
+    {
+      "name": "brand-landingpage",
+      "version": "1.0.1",
+      "skills": [
+        "brand-landingpage"
+      ],
+      "agents": []
+    },
+    {
+      "name": "ui-design",
+      "version": "1.0.5",
+      "skills": [
+        "accessibility-compliance",
+        "design-system-patterns",
+        "interaction-design",
+        "mobile-android-design",
+        "mobile-ios-design",
+        "react-native-design",
+        "responsive-design",
+        "visual-design-foundations",
+        "web-component-design"
+      ],
+      "agents": [
+        "accessibility-expert.md",
+        "design-system-architect.md",
+        "ui-designer.md"
+      ]
+    },
+    {
+      "name": "frontend-mobile-development",
+      "version": "1.2.3",
+      "skills": [
+        "nextjs-app-router-patterns",
+        "react-native-architecture",
+        "react-state-management",
+        "tailwind-design-system"
+      ],
+      "agents": [
+        "frontend-developer.md",
+        "mobile-developer.md"
+      ]
+    },
+    {
+      "name": "payment-processing",
+      "version": "1.2.3",
+      "skills": [
+        "billing-automation",
+        "paypal-integration",
+        "pci-compliance",
+        "stripe-integration"
+      ],
+      "agents": [
+        "payment-integration.md"
+      ]
+    },
+    {
+      "name": "business-analytics",
+      "version": "1.2.3",
+      "skills": [
+        "data-storytelling",
+        "kpi-dashboard-design"
+      ],
+      "agents": [
+        "business-analyst.md"
+      ]
+    }
+  ]
+}

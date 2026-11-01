@@ -14,13 +14,35 @@
   },
   "extraKnownMarketplaces": {
     "ui-ux-pro-max-skill": {
-      "source": { "source": "github", "repo": "nextlevelbuilder/ui-ux-pro-max-skill" }
+      "source": {
+        "source": "github",
+        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+      }
     },
     "marketingskills": {
-      "source": { "source": "github", "repo": "coreyhaines31/marketingskills" }
+      "source": {
+        "source": "github",
+        "repo": "coreyhaines31/marketingskills"
+      }
     },
     "claude-code-workflows": {
-      "source": { "source": "github", "repo": "wshobson/agents" }
+      "source": {
+        "source": "github",
+        "repo": "wshobson/agents"
+      }
     }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/scripts/cloud-setup.sh"
+          }
+        ]
+      }
+    ]
   }
 }

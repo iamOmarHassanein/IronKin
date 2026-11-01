@@ -32,8 +32,21 @@ For anything new or creative, start with `superpowers:brainstorming`. For plans 
 - Keep raw footage and large renders out of git. Commit briefs, prompts and links to the files.
 - Record decisions that affect more than one workstream in `10-ops/decisions.md`.
 
+- Agent notes go in `brain/`. Commit them with the work.
+
+## Cloud sessions
+
+GitHub is the source of truth. This work runs in cloud sessions, so the laptop can be off.
+
+- Plugins do not load in the cloud. Their skills are copied into `.claude/skills/` without the plugin prefix, so `marketing-skills:ads` in the table above is `ads` there. The same applies to every prefixed name, including `superpowers:brainstorming`.
+- `anthropic-skills:*` are not in the repo. They come from the skills enabled on the owner's claude.ai account.
+- Nothing on the laptop exists in the cloud, including `Desktop` folders and `~/.claude`.
+- A cloud session's work is not safe until it is pushed. Push before stopping.
+- API keys go in the cloud environment's network secrets, never in the repo.
+- `scripts/cloud-setup.sh` installs ffmpeg at session start and does nothing on a laptop.
+
 ## Skills in this repo
 
-- `.claude/settings.json` turns on the owner's 11 plugins for this project.
-- `.claude/skills/` holds copies of the owner's personal skills, so cloud sessions and other machines have them. `ats-resume-optimizer` is left out because it is for job applications.
-- `.claude/agents/` holds IronKin versions of the owner's four agents.
+- `.claude/settings.json` turns on the owner's 11 plugins on the laptop.
+- `.claude/skills/` and `.claude/agents/` hold copies for cloud sessions and other machines: the owner's personal skills and agents, plus everything from those plugins. `ats-resume-optimizer` is left out because it is for job applications.
+- To refresh the plugin copies, run `node scripts/sync-plugins.mjs` on a machine with the plugins installed. Versions are in `.claude/vendored-plugins.json` and licenses in `.claude/licenses/`.

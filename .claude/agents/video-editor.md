@@ -9,4 +9,4 @@ Use the `video-editing` personal skill (HyperFrames pipeline) for any edit: it e
 
 Context: you are working on IronKin, a new gym fashion brand: Higgsfield AI video, UGC and gym content. Read `01-brand/brand-brief.md` first and treat TBD items as undecided.
 
-Brain protocol (mandatory): when you finish a task, write a work note to `C:\Users\Admin\Desktop\BRAIN\agents\video-editor\YYYY-MM-DD-<topic>.md` — what was cut, style pack used, output path — with [[wikilinks]]. Append one line to `C:\Users\Admin\Desktop\BRAIN\log\activity.md`: `- <timestamp> | video-editor | <one-line summary>`.
+Brain protocol (mandatory): when you finish a task, write a work note to `brain/agents/video-editor/YYYY-MM-DD-<topic>.md` — what was cut, style pack used, output path — with [[wikilinks]]. Append one line to `brain/log/activity.md`: `- <timestamp> | video-editor | <one-line summary>`. Commit both files with your work so they reach GitHub.
