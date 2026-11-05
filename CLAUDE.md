@@ -9,18 +9,27 @@ This is a new brand. Do not reuse names, positioning, colors or assets from Wash
 
 Find the task below, use the listed skills and agent, and save the output in that folder. Skill names are the repo copies in `.claude/skills/`, which work on the laptop and in the cloud.
 
-| Folder | Covers | Skills | Agent |
+| Folder | Covers | Skills | Team |
 |---|---|---|---|
-| `01-brand/` | Positioning, audience, naming, visual identity, voice | `brand`, `design`, `design-system`, `product-marketing`, `customer-research`, `competitor-profiling`, `competitors`, `ads-competitor` | `marketer` |
-| `02-product/` | Tech packs, BOMs, size specs, samples, suppliers | `clothing-shop-studio` (garment intake to factory handoff pack), `pricing`, `xlsx`, `pdf` | none |
-| `03-website/` | Store, landing pages, checkout, SEO | `brand-landingpage`, `ecom-landing-pages`, `frontend-design`, `ui-ux-pro-max`, `cro`, `ads-landing`, `seo-audit`, `schema`, all `shopify-*` skills, `stripe-integration` | `web-developer` |
-| `04-tracking/` | Pixels, server events, UTMs, KPIs, dashboards | `analytics`, `ads-server-side-tracking`, `ads-attribution`, `kpi-dashboard-design`, `data-storytelling` | `web-developer` |
-| `05-ads/` | Campaign structure, creative testing, offers, ad control | `ads` (routes to `ads-meta`, `ads-tiktok`, `ads-plan`, `ads-create`, `ads-launch`, `ads-optimize`), `ad-creative`, `ads-creative`, `ads-test`, `ads-math`, `offers` | `marketer` |
-| `06-video-ai/` | Higgsfield image and video, reels editing | Higgsfield connector, `video-editing`, `editing` (routes to `short-editing`, `broll`, `clips`, `steal`, `vox`), `video`, `image` | `video-editor` |
-| `07-content/` | Scripts, hooks, calendar, organic social, graphics, email | `studio-script`, `outliers`, `content-strategy`, `social`, `copywriting`, `banner-design`, `canvas-design`, `theme-factory`, `emails`, `publish` | `content-strategist` |
-| `08-media-buying/` | Media buyer hiring, briefs, SOPs, budgets, reporting | `ads-plan`, `ads-budget`, `ads-monitor`, `ads-report`, `ads-audit`, `marketing-plan` | `marketer` |
-| `09-ugc/` | Creator sourcing, UGC briefs, photo and video shoots, usage rights | `ads-create` (briefs), `ads-photoshoot` (product photos), `ad-creative`, `video`, `community-marketing` | `content-strategist` |
-| `10-ops/` | Launch plan, roadmap, decisions, finances | `launch`, `marketing-plan`, `xlsx` | `marketer` |
+| `01-brand/` | Positioning, audience, naming, visual identity, voice | `brand`, `design`, `design-system`, `product-marketing`, `customer-research`, `competitor-profiling`, `competitors`, `ads-competitor` | `brand-studio` |
+| `02-product/` | Tech packs, BOMs, size specs, samples, suppliers | `clothing-shop-studio` (garment intake to factory handoff pack), `pricing`, `xlsx`, `pdf` | `product-team` |
+| `03-website/` | Store, landing pages, checkout, SEO | `brand-landingpage`, `ecom-landing-pages`, `frontend-design`, `ui-ux-pro-max`, `cro`, `ads-landing`, `seo-audit`, `schema`, all `shopify-*` skills, `stripe-integration` | `web-team` |
+| `04-tracking/` | Pixels, server events, UTMs, KPIs, dashboards | `analytics`, `ads-server-side-tracking`, `ads-attribution`, `kpi-dashboard-design`, `data-storytelling` | `web-team` |
+| `05-ads/` | Campaign structure, creative testing, offers, ad control | `ads` (routes to `ads-meta`, `ads-tiktok`, `ads-plan`, `ads-create`, `ads-launch`, `ads-optimize`), `ad-creative`, `ads-creative`, `ads-test`, `ads-math`, `offers` | `ads-team` |
+| `06-video-ai/` | Higgsfield image and video, reels editing | Higgsfield connector, `video-editing`, `editing` (routes to `short-editing`, `broll`, `clips`, `steal`, `vox`), `video`, `image` | `production-team` |
+| `07-content/` | Scripts, hooks, calendar, organic social, graphics, email | `studio-script`, `outliers`, `content-strategy`, `social`, `copywriting`, `banner-design`, `canvas-design`, `theme-factory`, `emails`, `publish` | `content-team` |
+| `08-media-buying/` | Media buyer hiring, briefs, SOPs, budgets, reporting | `ads-plan`, `ads-budget`, `ads-monitor`, `ads-report`, `ads-audit`, `marketing-plan` | `ads-team` |
+| `09-ugc/` | Creator sourcing, UGC briefs, photo and video shoots, usage rights | `ads-create` (briefs), `ads-photoshoot` (product photos), `ad-creative`, `video`, `community-marketing` | `production-team` |
+| `10-ops/` | Launch plan, roadmap, decisions, finances | `launch`, `marketing-plan`, `xlsx` | owner |
+
+## Brand teams
+
+Six team agents in `.claude/agents/` do the work. The owner is brand director and approves anything that costs money or goes public.
+
+- Give each task to the team that owns its folder in the table above. Work that spans teams is split: for example, a launch needs content-team scripts, production-team shoots, ads-team campaigns and web-team pages.
+- Teams hand off to each other through files in their folders, not by redoing each other's work.
+- The claude-ads specialist agents (`audit-*`, `copy-writer`, `creative-strategist`, `format-adapter`, `visual-designer` and the rest) work for ads-team.
+- The laptop also has the owner's own `marketer`, `content-strategist`, `video-editor` and `web-developer` agents. They are for other projects; do not use them for IronKin.
 
 For anything new or creative, start with `brainstorming`. For plans with several steps, use `writing-plans`.
 
