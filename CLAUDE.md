@@ -7,22 +7,22 @@ This is a new brand. Do not reuse names, positioning, colors or assets from Wash
 
 ## Workstreams and skills
 
-Find the task below, use the listed skills and agent, and save the output in that folder.
+Find the task below, use the listed skills and agent, and save the output in that folder. Skill names are the repo copies in `.claude/skills/`, which work on the laptop and in the cloud.
 
 | Folder | Covers | Skills | Agent |
 |---|---|---|---|
-| `01-brand/` | Positioning, audience, naming, visual identity, voice | `ui-ux-pro-max:brand`, `ui-ux-pro-max:design-system`, `marketing-skills:product-marketing`, `marketing-skills:customer-research`, `marketing-skills:competitors`, `marketing-skills:competitor-profiling` | `marketer` |
-| `02-product/` | Tech packs, BOMs, size specs, samples, suppliers | `anthropic-skills:xlsx`, `anthropic-skills:pdf`, `anthropic-skills:canvas-design`, `marketing-skills:pricing` | none |
-| `03-website/` | Store, landing pages, checkout, SEO | `brand-landingpage:brand-landingpage`, `ecom-landing-pages`, `ui-ux-pro-max:ui-ux-pro-max`, `marketing-skills:cro`, `marketing-skills:seo-audit`, `marketing-skills:schema`, all `shopify-*` skills, `payment-processing:stripe-integration` | `web-developer` |
-| `04-tracking/` | Pixels, server events, UTMs, KPIs, dashboards | `marketing-skills:analytics`, `business-analytics:kpi-dashboard-design`, `business-analytics:data-storytelling`, `dataviz` | `web-developer` |
-| `05-ads/` | Campaign structure, creative testing, offers, ad control | `marketing-skills:ads`, `marketing-skills:ad-creative`, `marketing-skills:ab-testing`, `marketing-skills:offers`, `marketing-skills:marketing-psychology` | `marketer` |
-| `06-video-ai/` | Higgsfield image and video generation, editing | Higgsfield connector, `video-editing`, `marketing-skills:video`, `marketing-skills:image` | `video-editor` |
-| `07-content/` | Scripts, hooks, calendar, organic social, email | `marketing-skills:content-strategy`, `marketing-skills:social`, `marketing-skills:copywriting`, `marketing-skills:copy-editing`, `marketing-skills:emails`, `social-publishing:social-publishing` | `content-strategist` |
-| `08-media-buying/` | Media buyer hiring, briefs, SOPs, reporting | `marketing-skills:ads`, `marketing-skills:marketing-plan`, `business-analytics:data-storytelling` | `marketer` |
-| `09-ugc/` | Creator sourcing, UGC briefs, shoot plans, usage rights | `marketing-skills:ad-creative`, `marketing-skills:video`, `marketing-skills:community-marketing` | `content-strategist` |
-| `10-ops/` | Launch plan, roadmap, decisions, finances | `marketing-skills:launch`, `marketing-skills:marketing-plan`, `anthropic-skills:xlsx` | `marketer` |
+| `01-brand/` | Positioning, audience, naming, visual identity, voice | `brand`, `design`, `design-system`, `product-marketing`, `customer-research`, `competitor-profiling`, `competitors`, `ads-competitor` | `marketer` |
+| `02-product/` | Tech packs, BOMs, size specs, samples, suppliers | `clothing-shop-studio` (garment intake to factory handoff pack), `pricing`, `xlsx`, `pdf` | none |
+| `03-website/` | Store, landing pages, checkout, SEO | `brand-landingpage`, `ecom-landing-pages`, `frontend-design`, `ui-ux-pro-max`, `cro`, `ads-landing`, `seo-audit`, `schema`, all `shopify-*` skills, `stripe-integration` | `web-developer` |
+| `04-tracking/` | Pixels, server events, UTMs, KPIs, dashboards | `analytics`, `ads-server-side-tracking`, `ads-attribution`, `kpi-dashboard-design`, `data-storytelling` | `web-developer` |
+| `05-ads/` | Campaign structure, creative testing, offers, ad control | `ads` (routes to `ads-meta`, `ads-tiktok`, `ads-plan`, `ads-create`, `ads-launch`, `ads-optimize`), `ad-creative`, `ads-creative`, `ads-test`, `ads-math`, `offers` | `marketer` |
+| `06-video-ai/` | Higgsfield image and video, reels editing | Higgsfield connector, `video-editing`, `editing` (routes to `short-editing`, `broll`, `clips`, `steal`, `vox`), `video`, `image` | `video-editor` |
+| `07-content/` | Scripts, hooks, calendar, organic social, graphics, email | `studio-script`, `outliers`, `content-strategy`, `social`, `copywriting`, `banner-design`, `canvas-design`, `theme-factory`, `emails`, `publish` | `content-strategist` |
+| `08-media-buying/` | Media buyer hiring, briefs, SOPs, budgets, reporting | `ads-plan`, `ads-budget`, `ads-monitor`, `ads-report`, `ads-audit`, `marketing-plan` | `marketer` |
+| `09-ugc/` | Creator sourcing, UGC briefs, photo and video shoots, usage rights | `ads-create` (briefs), `ads-photoshoot` (product photos), `ad-creative`, `video`, `community-marketing` | `content-strategist` |
+| `10-ops/` | Launch plan, roadmap, decisions, finances | `launch`, `marketing-plan`, `xlsx` | `marketer` |
 
-For anything new or creative, start with `superpowers:brainstorming`. For plans with several steps, use `superpowers:writing-plans`.
+For anything new or creative, start with `brainstorming`. For plans with several steps, use `writing-plans`.
 
 ## Working rules
 

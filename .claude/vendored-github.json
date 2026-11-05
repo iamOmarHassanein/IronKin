@@ -1,0 +1,109 @@
+{
+  "sources": [
+    {
+      "repo": "anthropics/skills",
+      "commit": "ca45fc496a3436251f191354091d557da31c15b5",
+      "skills": [
+        "canvas-design",
+        "frontend-design",
+        "theme-factory"
+      ],
+      "agents": []
+    },
+    {
+      "repo": "AgriciDaniel/claude-ads",
+      "commit": "fc3908e786c318776df89a3a098333da377364be",
+      "skills": [
+        "ads",
+        "ads-amazon",
+        "ads-apple",
+        "ads-attribution",
+        "ads-audit",
+        "ads-budget",
+        "ads-competitor",
+        "ads-create",
+        "ads-creative",
+        "ads-dna",
+        "ads-generate",
+        "ads-google",
+        "ads-landing",
+        "ads-launch",
+        "ads-linkedin",
+        "ads-math",
+        "ads-meta",
+        "ads-microsoft",
+        "ads-monitor",
+        "ads-optimize",
+        "ads-photoshoot",
+        "ads-pinterest",
+        "ads-plan",
+        "ads-reddit",
+        "ads-report",
+        "ads-research",
+        "ads-server-side-tracking",
+        "ads-setup",
+        "ads-snapchat",
+        "ads-test",
+        "ads-tiktok",
+        "ads-validate",
+        "ads-x",
+        "ads-youtube"
+      ],
+      "agents": [
+        "audit-amazon.md",
+        "audit-apple.md",
+        "audit-budget.md",
+        "audit-creative.md",
+        "audit-google.md",
+        "audit-linkedin.md",
+        "audit-meta.md",
+        "audit-microsoft.md",
+        "audit-pinterest.md",
+        "audit-policy-compliance.md",
+        "audit-reddit.md",
+        "audit-regulatory-compliance.md",
+        "audit-snapchat.md",
+        "audit-tiktok.md",
+        "audit-tracking.md",
+        "audit-x.md",
+        "audit-youtube.md",
+        "copy-writer.md",
+        "creative-strategist.md",
+        "format-adapter.md",
+        "release-verifier.md",
+        "research-worker.md",
+        "skill-reviewer.md",
+        "source-verifier.md",
+        "visual-designer.md"
+      ]
+    },
+    {
+      "repo": "Melvynx/video-agent-skills",
+      "commit": "4774fa4f2601baa822fd513387202c26e4587902",
+      "skills": [
+        "broll",
+        "clips",
+        "codex-images",
+        "editing",
+        "insta-audit",
+        "outliers",
+        "publish",
+        "short-editing",
+        "short-translate",
+        "steal",
+        "studio-script",
+        "studio-setup",
+        "vox"
+      ],
+      "agents": []
+    },
+    {
+      "repo": "eatenquek/clothing-shop-studio",
+      "commit": "19ac4e273e42e4b0583ea2960253b4da38294d08",
+      "skills": [
+        "clothing-shop-studio"
+      ],
+      "agents": []
+    }
+  ]
+}

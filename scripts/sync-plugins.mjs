@@ -41,7 +41,8 @@ for (const id of Object.keys(enabled)) {
     const dir = join(installPath, sub);
     if (!existsSync(dir)) continue;
     for (const skill of readdirSync(dir)) {
-      if (!statSync(join(dir, skill)).isDirectory()) continue;
+      // claude-ads, from scripts/sync-github-skills.mjs, replaces marketing-skills' ads.
+      if (!statSync(join(dir, skill)).isDirectory() || skill === 'ads') continue;
       cpSync(join(dir, skill), fresh(join(claude, 'skills', skill)), { recursive: true, dereference: true, filter: skip });
       entry.skills.push(skill);
     }
