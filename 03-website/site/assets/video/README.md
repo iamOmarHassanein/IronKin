@@ -1,6 +1,6 @@
 # Hero video slot
 
-Drop the training film here with these names and the home page plays it automatically:
+Drop the training film here with these names, then set `hero.video.enabled` to `true` in `assets/js/catalog.js`:
 
 - `hero-training-desktop.mp4`: widescreen crop, 12 to 15 seconds, H.264, muted, ideally under 8 MB
 - `hero-training-mobile.mp4`: vertical or 4:5 crop that keeps the athletes and garment details in frame

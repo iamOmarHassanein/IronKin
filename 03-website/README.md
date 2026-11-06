@@ -4,6 +4,10 @@ The IRONKIN storefront lives in [site/](site/): plain HTML, CSS and JavaScript, 
 
 ## Run it locally
 
+Double-click `03-website/start-site.bat`. It opens http://localhost:4173 and keeps the site running until you close its window.
+
+Or from a terminal in the repo:
+
 ```bash
 python -m http.server 4173 --bind 127.0.0.1 --directory 03-website/site
 ```

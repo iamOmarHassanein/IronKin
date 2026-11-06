@@ -221,7 +221,7 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
 
   function heroVideo() {
     const v = $(".hero-video"), btn = $(".hero-toggle"), poster = $(".hero-poster");
-    if (reducedMotion) return;  // poster only
+    if (reducedMotion || !C.hero.video.enabled) return;  // poster only
     const src = window.matchMedia("(max-width: 700px)").matches ? C.hero.video.mobile : C.hero.video.desktop;
     v.src = src;
     v.addEventListener("canplay", () => {

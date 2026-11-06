@@ -14,7 +14,9 @@ window.IRONKIN = {
     title: ["THE FIRST", "REP"],
     cta: "SHOP THE DROP",
     href: "shop.html?collection=001",
+    // Set enabled to true once the clips are in assets/video, so the page does not request missing files.
     video: {
+      enabled: false,
       desktop: "assets/video/hero-training-desktop.mp4",
       mobile: "assets/video/hero-training-mobile.mp4",
     },
