@@ -1,6 +1,20 @@
 # Tech packs
 
-One fillable PDF per Collection 001 piece, plus a blank master for new products. Each pack has 7 pages:
+## Basic (2 pages), in `basic/`
+
+Start here for first samples. Page 1 is the design: style details, front and back flats with numbered notes, and logo placement. Page 2 is how to make it: measurements, materials, construction, labels and packaging, sample comments and sign-off.
+
+| File | Piece |
+|---|---|
+| `basic/IK-001-HD-BLK_signature-hoodie_basic.pdf` | Signature Hoodie, black |
+| `basic/IK-001-WP-BLK_wide-leg-pants_basic.pdf` | Wide-Leg Pants, black |
+| `basic/IK-001-WT-RSE_womens-fitted-tee_basic.pdf` | Women's Fitted Tee, washed rose |
+| `basic/IK-001-WF-RSE_womens-flared-leggings_basic.pdf` | Women's Flared Leggings, washed rose |
+| `basic/IK-TECH-PACK_basic-blank.pdf` | Blank 2-page master |
+
+## Full (7 pages)
+
+For factories that ask for more detail. One fillable PDF per Collection 001 piece, plus a blank master for new products. Each pack has 7 pages:
 
 1. Cover: style number, name, collection, season, colourway, fit, size range, fabric, version, factory, status
 2. Flats and design details: front and back with numbered callouts and notes
@@ -38,6 +52,6 @@ The packs are built from the data at the top of `tools/build_techpacks.py`. Chan
 python 02-product/tech-packs/tools/build_techpacks.py
 ```
 
-That rewrites all five PDFs, so do this before hand edits, not after. Flats come from `03-website/source-boards/cutouts/`, made by `03-website/tools/make_assets.py`.
+That rewrites all the PDFs, basic and full, so do this before hand edits, not after. Flats come from `03-website/source-boards/cutouts/`, made by `03-website/tools/make_assets.py`.
 
 Fonts: Barlow and Barlow Condensed, SIL Open Font License (`tools/fonts/OFL.txt`).

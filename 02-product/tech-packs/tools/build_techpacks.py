@@ -181,8 +181,8 @@ PRODUCTS = [
 
 
 class Pack:
-    def __init__(self, c, product, blank=False):
-        self.c, self.p, self.blank, self.n = c, product, blank, 0
+    def __init__(self, c, product, blank=False, total=TOTAL_PAGES):
+        self.c, self.p, self.blank, self.n, self.total = c, product, blank, 0, total
 
     def v(self, value):
         return "" if self.blank else value
@@ -210,7 +210,7 @@ class Pack:
         c.setStrokeColor(LINE); c.setLineWidth(0.5); c.line(M, 30, W - M, 30)
         c.setFillColor(MUTED); c.setFont("Body", 7)
         c.drawString(M, 18, "IRONKIN  ·  Confidential  ·  All measurements in cm  ·  TBC = to be confirmed")
-        c.drawRightString(W - M, 18, f"Page {page} of {TOTAL_PAGES}")
+        c.drawRightString(W - M, 18, f"Page {page} of {self.total}")
 
     def label(self, text, x, y, size=7.5, color=MUTED):
         self.c.setFont("Label", size); self.c.setFillColor(color); self.c.drawString(x, y, text.upper())
@@ -413,11 +413,126 @@ def build(product, blank=False):
     for page in (cover, flats, artwork, measurements, bom, construction, labels):
         page(pk)
     c.save()
+    _need_appearances(path)
+    return path, pk.n
+
+
+def _need_appearances(path):
+    """Ask Acrobat to redraw fields on open, so multi-line text wraps."""
     from pypdf import PdfReader, PdfWriter
     writer = PdfWriter(clone_from=PdfReader(path))
     writer.set_need_appearances_writer(True)
     with open(path, "wb") as fh:
         writer.write(fh)
+
+
+# ---------------------------------------------------------------------------------------------
+# Basic 2-page pack: page 1 is the design, page 2 is how to make it.
+
+
+def flats_with_callouts(pk, x, y, w, h):
+    """Front and back flats side by side with numbered callouts. Returns the notes in callout order."""
+    c, p = pk.c, pk.p
+    gap = 10
+    bw = (w - gap) / 2
+    for i, (key, side) in enumerate([("front", "callouts_front"), ("back", "callouts_back")]):
+        bx0 = x + i * (bw + gap)
+        box = pk.image_box(os.path.join(CUT, p[key]), bx0, y, bw, h, bg=PAPER, caption=key, placeholder=f"{key} flat")
+        if box and not pk.blank:
+            bx, by, bwid, bh = box
+            start = 1 if side == "callouts_front" else len(p["callouts_front"]) + 1
+            for k, (nx, ny, _) in enumerate(p[side]):
+                tx, ty = bx + nx * bwid, by + (1 - ny) * bh
+                dx = 22 if nx >= 0.5 else -22
+                lx = min(max(tx + dx, bx0 + 10), bx0 + bw - 10)
+                ly = min(ty + 15, by + bh + 4)
+                c.setFillColor(RED); c.circle(tx, ty, 1.8, stroke=0, fill=1)
+                pk.callout(start + k, tx, ty, lx, ly)
+    return [n for _, _, n in p["callouts_front"] + p["callouts_back"]]
+
+
+def basic_design(pk):
+    c, p = pk.c, pk.p
+    pk.header("Tech pack · design", 1)
+    today = datetime.date.today().isoformat()
+    info = [("Style number", p["style_no"]), ("Style name", p["name"]), ("Collection", "001 / The First Rep"),
+            ("Colourway", p["colourway"]), ("Fit", p["fit"]),
+            ("Main fabric", p["fabric"]), ("Size range", f'{p["sizes"][0]} to {p["sizes"][-1]}'),
+            ("Sample size", p["sample"]), ("Version / date", f"V1 Proto · {today}"), ("Factory", "TBC")]
+    cw = (W - 2 * M - 4 * 8) / 5
+    for i, (key, val) in enumerate(info):
+        x = M + (i % 5) * (cw + 8)
+        y = H - 82 - (i // 5) * 36
+        pk.label(key, x, y + 19)
+        pk.field(key.lower().replace(" ", "_").replace("/", ""), val, x, y, cw, 16, 8)
+    top = H - 132
+    fw = 400
+    notes = flats_with_callouts(pk, M, 50, fw, top - 50)
+    x0 = M + fw + 18
+    rw = W - M - x0
+    pk.label("Design notes", x0, top - 4, 9, INK)
+    y = top - 26
+    for k in range(7):
+        pk.callout(k + 1, x0 + 7, y + 8)
+        pk.field(f"note_{k + 1}", notes[k] if k < len(notes) else "", x0 + 20, y, rw - 20, 16, 7.5)
+        y -= 21
+    pk.label("Logo and artwork placement", x0, y - 4, 9, INK)
+    widths = [16, 58, 88, 60, 52, rw - 274]
+    rows = [[a[0], a[1], a[3], a[4], a[5], a[6]] for a in p["artwork"]]
+    pk.table("art", x0, y - 12, widths, ["#", "Where", "Method", "Colour", "Size", "Position"],
+             rows, row_h=30, n_rows=4, size=7, multiline=True)
+    c.showPage()
+
+
+def basic_make(pk):
+    c, p = pk.c, pk.p
+    pk.header("Tech pack · measurements and make", 2)
+    sizes = p["sizes"]
+    lw = 470
+    size_w = 34
+    widths = [22, lw - 22 - 34 - size_w * len(sizes), 34] + [size_w] * len(sizes)
+    pk.label(f'Measurements in cm · sample size {p["sample"] if not pk.blank else "___"} · measure flat', M, H - 70, 8)
+    rows = [[code, pom, tol] + [""] * len(sizes) for code, pom, tol in p["pom"]]
+    pk.table("pom", M, H - 78, widths, ["", "Point of measure", "Tol ±"] + sizes, rows, row_h=17, size=7.5,
+             n_rows=max(24, len(rows)))
+    x0 = M + lw + 18
+    rw = W - M - x0
+    pk.label("Materials", x0, H - 70, 9, INK)
+    bwid = [96, rw - 96 - 70, 70]
+    bottom = pk.table("bom", x0, H - 78, bwid, ["Component", "Description", "Colour"],
+                      [[b[1], b[2], b[3]] for b in p["bom"]], row_h=16, size=7, n_rows=max(9, len(p["bom"])))
+    con = "\n".join(f"{a}: {s}" + (f" ({n})" if n else "") for a, s, _, n in p["construction"])
+    y = bottom - 16
+    pk.label("Construction", x0, y, 9, INK)
+    pk.field("construction", con, x0, y - 86, rw, 80, 7, multiline=True)
+    y -= 102
+    lab = "Neck: woven IRONKIN label. Care: left side seam, content and symbols TBC. Hang tag: bone card. Pack: single polybag, fold 30 x 35 cm."
+    pk.label("Labels and packaging", x0, y, 9, INK)
+    pk.field("labels", lab, x0, y - 42, rw, 36, 7, multiline=True)
+    y -= 58
+    pk.label("Sample comments", x0, y, 9, INK)
+    pk.field("comments", "", x0, 74, rw, y - 80, 7.5, multiline=True)
+    half = (rw - 8) / 2
+    pk.label("Approved by", x0, 64)
+    pk.label("Date", x0 + half + 8, 64)
+    pk.field("approved_by", "", x0, 44, half, 16)
+    pk.field("approved_date", "", x0 + half + 8, 44, half, 16)
+    c.showPage()
+
+
+def build_basic(product, blank=False):
+    folder = os.path.join(OUT, "basic")
+    os.makedirs(folder, exist_ok=True)
+    name = "IK-TECH-PACK_basic-blank" if blank else product["file"] + "_basic"
+    path = os.path.join(folder, f"{name}.pdf")
+    c = canvas.Canvas(path, pagesize=(W, H))
+    c.setTitle("IRONKIN basic tech pack" + ("" if blank else f" · {product['style_no']} {product['name']}"))
+    c.setAuthor("IRONKIN")
+    pk = Pack(c, product, blank, total=2)
+    basic_design(pk)
+    basic_make(pk)
+    c.save()
+    _need_appearances(path)
     return path, pk.n
 
 
@@ -427,3 +542,8 @@ if __name__ == "__main__":
         print(os.path.basename(path), f"{n} fields")
     path, n = build(PRODUCTS[0], blank=True)
     print(os.path.basename(path), f"{n} fields")
+    for prod in PRODUCTS:
+        path, n = build_basic(prod)
+        print("basic/" + os.path.basename(path), f"{n} fields")
+    path, n = build_basic(PRODUCTS[0], blank=True)
+    print("basic/" + os.path.basename(path), f"{n} fields")
