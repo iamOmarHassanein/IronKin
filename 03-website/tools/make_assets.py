@@ -65,8 +65,14 @@ def cutout(im, box, tol=34):
     return Image.fromarray(rgba[ys.min():ys.max() + 1, xs.min():xs.max() + 1], "RGBA")
 
 
+CUTOUTS = os.path.join(ROOT, "source-boards", "cutouts")
+os.makedirs(CUTOUTS, exist_ok=True)
+
+
 def card(garment, out, fill=0.82):
-    """Place a cut-out garment on a charcoal 4:5 card with a soft spotlight and floor shadow."""
+    """Place a cut-out garment on a charcoal 4:5 card with a soft spotlight and floor shadow.
+    Also keeps the transparent cut-out for the tech packs."""
+    garment.save(os.path.join(CUTOUTS, out.replace(".jpg", ".png")))
     W, H = CARD
     yy, xx = np.mgrid[0:H, 0:W]
     d = np.sqrt(((xx - W / 2) / W) ** 2 + ((yy - H * 0.42) / H) ** 2)
