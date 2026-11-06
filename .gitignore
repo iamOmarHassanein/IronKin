@@ -35,3 +35,6 @@ graphify-out/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Website hero clips are small, web-ready and needed by the site
+!03-website/site/assets/video/*.mp4
