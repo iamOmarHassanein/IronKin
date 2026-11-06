@@ -5,7 +5,9 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const collection = (id) => C.collections.find((c) => c.id === id);
-  const product = (id) => C.products.find((p) => p.id === id);
+  // Live products: not hidden and in a released collection.
+  const live = C.products.filter((p) => !p.hidden && C.collections.some((c) => c.id === p.collection));
+  const product = (id) => live.find((p) => p.id === id);
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const WORDMARK = '<img class="wordmark" src="assets/brand/ironkin-wordmark-bone.svg" alt="IRONKIN" width="168" height="29">';
@@ -133,15 +135,15 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
     </article>`;
   }
 
-  const FILTERS = [["all", "All"], ["001", "Winter"], ["002", "Compression"], ["003", "Pump Covers"], ["women", "Women"]];
+  const FILTERS = [["all", "All"], ...C.collections.map((c) => [c.id, c.label.charAt(0) + c.label.slice(1).toLowerCase()]), ["women", "Women"]];
   function filterBar(active) {
     return `<div class="filters" role="group" aria-label="Filter products">${FILTERS.map(([k, l]) =>
       `<button class="chip${k === active ? " on" : ""}" data-filter="${k}" aria-pressed="${k === active}">${l}</button>`).join("")}</div>`;
   }
   function filtered(key) {
-    if (key === "women") return C.products.filter((p) => p.women);
-    if (key === "all") return C.products;
-    return C.products.filter((p) => p.collection === key);
+    if (key === "women") return live.filter((p) => p.women);
+    if (key === "all") return live;
+    return live.filter((p) => p.collection === key);
   }
   function gridHTML(key) {
     const list = filtered(key);
@@ -178,11 +180,17 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
   <button class="hero-toggle" hidden aria-label="Pause background video"><span class="i-pause" aria-hidden="true"></span></button>
 </section>
 
-<section class="tiles" aria-label="Collections">
-  ${C.collections.map((c) => `<a class="tile" href="shop.html?collection=${c.id}">
-    <img src="${c.image}" alt="${esc(c.alt)}" width="720" height="544" loading="lazy">
-    <span class="tile-copy"><span class="display italic">${c.id} /<br>${esc(c.name)}</span><span class="tile-label"><span class="rule"></span>${esc(c.label)}</span></span>
-  </a>`).join("")}
+<section class="collections" aria-label="Collections">
+  ${C.collections.map((c) => `<article class="feature">
+    <a class="feature-media" href="shop.html?collection=${c.id}"><img src="${c.image}" alt="${esc(c.alt)}" width="1122" height="1402" loading="lazy"></a>
+    <div class="feature-copy">
+      <p class="eyebrow"><span class="rule"></span> ${esc(c.label)}</p>
+      <h2 class="display italic">${c.id} /<br>${esc(c.name)}</h2>
+      <p>${esc(c.blurb || "")}</p>
+      <p class="feature-count">${live.filter((p) => p.collection === c.id).length} pieces</p>
+      <a class="btn btn-red" href="shop.html?collection=${c.id}">Shop ${c.id}</a>
+    </div>
+  </article>`).join("")}
 </section>
 
 <section class="shop-block" aria-labelledby="stc">
@@ -195,7 +203,7 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
 <section class="about-preview" aria-labelledby="ap">
   <hr class="red-rule">
   <div class="about-row">
-    <img src="assets/img/about-crew.jpg" alt="The IRONKIN crew laughing together between sets in the gym" width="1400" height="726" loading="lazy">
+    <img src="assets/img/about-crew.jpg" alt="Five friends in IRONKIN hoodies, wide-leg pants and compression laughing together between sets in a warm-lit gym" width="1672" height="941" loading="lazy">
     <div>
       <p class="eyebrow">About us</p><span class="rule-short"></span>
       <h2 id="ap" class="display">Different lives.<br>Shared strength.</h2>
@@ -207,7 +215,7 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
 
 <section class="detail-banner" aria-label="Built into every detail">
   <hr class="red-rule">
-  <div class="detail-media"><img src="assets/img/detail-anvil-macro.jpg" alt="Macro of the raised cream split-anvil embroidery on black cotton Milton" width="1000" height="873" loading="lazy"></div>
+  <div class="detail-media"><img src="assets/img/detail-anvil-macro.jpg" alt="Macro of the raised cream split-anvil embroidery on black cotton Milton" width="520" height="454" loading="lazy"></div>
   <p class="detail-text">BUILT INTO EVERY DETAIL.</p>
 </section>`;
 
@@ -315,6 +323,7 @@ ${set.length ? `<section class="set"><hr class="red-rule"><h2 class="display ita
       const b = e.target.closest(".thumb"); if (!b) return;
       const im = p.images[+b.dataset.i];
       main.src = im.src; main.alt = im.alt;
+      main.classList.toggle("contain", im.src.includes("-detail-"));
       document.querySelectorAll(".thumb").forEach((t) => { t.classList.toggle("on", t === b); t.setAttribute("aria-pressed", t === b); });
     });
     const note = $(".add-note");
@@ -339,7 +348,7 @@ ${set.length ? `<section class="set"><hr class="red-rule"><h2 class="display ita
     ];
     $("#main").innerHTML = `
 <section class="about-hero">
-  <img src="assets/img/about-crew.jpg" alt="The IRONKIN crew laughing together between sets in the gym" width="1400" height="726">
+  <img src="assets/img/about-crew.jpg" alt="Five friends in IRONKIN hoodies, wide-leg pants and compression laughing together between sets in a warm-lit gym" width="1672" height="941">
   <div class="about-hero-copy">
     <p class="eyebrow">About us</p>
     <h1 class="display">Different lives.<br>Shared strength.</h1>
@@ -360,7 +369,7 @@ ${set.length ? `<section class="set"><hr class="red-rule"><h2 class="display ita
   </article>`).join("")}
 </section>
 <section class="closing">
-  <img src="assets/img/about-gym-banner.jpg" alt="A black IRONKIN banner hanging over squat racks in a red-lit gym" width="1400" height="768" loading="lazy">
+  <img src="assets/img/about-closing.jpg" alt="Two IRONKIN athletes standing in front of a loaded barbell rack under an IRONKIN banner" width="1122" height="1080" loading="lazy">
   <div class="closing-copy">
     <p class="display">Iron is what we train with.<br>Kin is who we become.</p>
     <a class="btn btn-red" href="shop.html">Shop the collections</a>

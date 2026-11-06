@@ -19,7 +19,7 @@ Then open http://localhost:4173.
 | Page | File | Notes |
 |---|---|---|
 | Home | `site/index.html` | Hero video slot, collection tiles, Shop the Collections, About preview, detail banner |
-| Shop | `site/shop.html` | Filters: All, Winter (001), Compression (002), Pump Covers (003), Women. Links: `?collection=001`, `?filter=women` |
+| Shop | `site/shop.html` | Filters: All, Winter (001), Women. Links: `?collection=001`, `?filter=women`. Only Collection 001 is live; the compression top is kept in `catalog.js` with `hidden: true` |
 | Product | `site/product.html?id=<product id>` | Gallery, size, add to bag, Fit & details, Complete the Set |
 | About Us | `site/about.html` | The IRONKIN Code panels as live text |
 
@@ -35,5 +35,5 @@ Everything editable is in [site/assets/js/catalog.js](site/assets/js/catalog.js)
 ## Status
 
 - Preview store: the bag works in the visitor's browser, checkout is not connected. Set `checkoutUrl` or connect a store platform to sell.
-- Product images are cut from the supplied product boards by `tools/make_assets.py`. Campaign images are cropped from the website mockup and are low resolution placeholders; the home hero image shows Collection 003 pump covers and should be replaced with the training film poster.
+- Product images are cut from the supplied product boards by `tools/make_assets.py`, after a 2x EDSR upscale by `tools/upscale_boards.py` (about 25 minutes on a laptop CPU; outputs in `source-boards/upscaled/`, not in git). The boards are 1536 px wide, so for sharper product shots supply higher-resolution boards or photos.
 - Not yet supplied: prices, size runs, fabric composition, care, shipping, social links, Collection 003 products, the hero film.

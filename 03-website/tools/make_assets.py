@@ -21,13 +21,18 @@ CHARCOAL = (24, 23, 22)       # #181716
 
 
 def board(name):
-    return Image.open(os.path.join(SRC, name)).convert("RGB")
+    """Load a board, preferring the 2x upscaled copy from upscale_boards.py. Crop boxes stay in original pixels."""
+    up = os.path.join(SRC, "upscaled", name.replace(".jpg", ".png"))
+    im = Image.open(up if os.path.exists(up) else os.path.join(SRC, name)).convert("RGB")
+    im.info["scale"] = 2 if os.path.exists(up) else 1
+    return im
 
 
 def cutout(im, box, tol=34):
     """Remove the cream board background around a garment by flood-filling from the edges."""
-    x, y, w, h = box
-    crop = np.asarray(im.crop((x - 12, y - 12, x + w + 12, y + h + 12))).astype(np.int16)
+    s = im.info.get("scale", 1)
+    x, y, w, h = (v * s for v in box)
+    crop = np.asarray(im.crop((x - 12 * s, y - 12 * s, x + w + 12 * s, y + h + 12 * s))).astype(np.int16)
     bg = np.median(np.concatenate([crop[0], crop[-1], crop[:, 0], crop[:, -1]]), axis=0)
     near = (np.abs(crop - bg).sum(2) < tol).astype(np.uint8)
     flood = np.zeros((near.shape[0] + 2, near.shape[1] + 2), np.uint8)
@@ -84,20 +89,11 @@ def card(garment, out, fill=0.82):
 
 
 def tile(im, box, out, size=None):
-    x0, y0, x1, y1 = box
-    t = im.crop(box)
+    s = im.info.get("scale", 1)
+    t = im.crop(tuple(v * s for v in box))
     if size:
         t = t.resize(size, Image.LANCZOS)
     t.save(os.path.join(IMG, out), quality=90)
-
-
-def upscale(im, box, out, width, sharpen=True):
-    t = im.crop(box)
-    h = round(width * t.height / t.width)
-    t = t.resize((width, h), Image.LANCZOS)
-    if sharpen:
-        t = t.filter(ImageFilter.UnsharpMask(radius=2, percent=60, threshold=2))
-    t.save(os.path.join(IMG, out), quality=86)
 
 
 # 001 Signature hoodie, black
@@ -143,24 +139,19 @@ tile(b, (409, 780, 755, 965), "002-compression-ss-black-detail-chest.jpg")
 tile(b, (772, 780, 1124, 965), "002-compression-ss-black-detail-graphic.jpg")
 tile(b, (35, 780, 392, 965), "002-compression-ss-black-detail-fabric.jpg")
 
-# Campaign crops from the website mockup, cut above its baked-in text.
-m = board("website-mockup.jpg")
-upscale(m, (0, 45, 562, 255), "hero-poster.jpg", 1800)
-upscale(m, (150, 45, 450, 255), "hero-poster-mobile.jpg", 900)
-upscale(m, (8, 396, 188, 532), "collection-001-tile.jpg", 720)
-upscale(m, (195, 396, 369, 532), "collection-002-tile.jpg", 720)
-upscale(m, (375, 396, 554, 532), "collection-003-tile.jpg", 720)
-upscale(m, (17, 1172, 345, 1342), "about-crew.jpg", 1400)
-
-# Code board: the gym-banner tile (no text in its upper half) for the About closing section.
-c = board("brand-ironkin-code-board.jpg")
-upscale(c, (520, 518, 1016, 790), "about-gym-banner.jpg", 1400)
+# Campaign photos supplied by the owner.
+Image.open(os.path.join(SRC, "001-campaign-standing.webp")).convert("RGB").save(os.path.join(IMG, "collection-001.jpg"), quality=90)
+crew = Image.open(os.path.join(SRC, "001-campaign-crew.webp")).convert("RGB")
+crew.save(os.path.join(IMG, "about-crew.jpg"), quality=90)
+standing = Image.open(os.path.join(SRC, "001-campaign-standing.webp")).convert("RGB")
+standing.crop((0, 150, 1122, 1230)).save(os.path.join(IMG, "about-closing.jpg"), quality=90)
 
 # Construction banner: real macro of the raised split-anvil from the hoodie board.
 b = board("001-signature-hoodie-black-board.jpg")
-upscale(b, (836, 716, 1096, 943), "detail-anvil-macro.jpg", 1000, sharpen=False)
+tile(b, (836, 716, 1096, 943), "detail-anvil-macro.jpg")
 
 # IK mark from the Code posters, traced to vector.
+c = board("brand-ironkin-code-board.jpg")
 g = np.asarray(c.convert("L")).astype(np.float32)[383:464, 218:299]
 big = cv2.resize(g, None, fx=10, fy=10, interpolation=cv2.INTER_CUBIC)
 big = cv2.GaussianBlur(big, (0, 0), 6)

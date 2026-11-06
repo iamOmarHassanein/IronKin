@@ -38,3 +38,6 @@ desktop.ini
 
 # Website hero clips are small, web-ready and needed by the site
 !03-website/site/assets/video/*.mp4
+
+# Upscaled boards are a 25-minute regenerable intermediate (03-website/tools/upscale_boards.py)
+03-website/source-boards/upscaled/

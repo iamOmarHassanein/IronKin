@@ -28,13 +28,11 @@ window.IRONKIN = {
     },
   },
 
+  // Only Collection 001 is live. Add 002 and 003 back here when their products are ready.
   collections: [
-    { id: "001", name: "THE FIRST REP", label: "WINTER", image: "assets/img/collection-001-tile.jpg",
-      alt: "Two models in the black Signature Hoodie and grey wide pants in a red-lit gym" },
-    { id: "002", name: "UNDER PRESSURE", label: "COMPRESSION", image: "assets/img/collection-002-tile.jpg",
-      alt: "A man and a woman in black IRONKIN compression tops with graphite graphics" },
-    { id: "003", name: "IRON / KIN", label: "PUMP COVERS", image: "assets/img/collection-003-tile.jpg",
-      alt: "Two models in oversized pump covers printed KIN and IRON", comingSoon: true },
+    { id: "001", name: "THE FIRST REP", label: "WINTER", image: "assets/img/collection-001.jpg",
+      alt: "A man in the black Signature Hoodie and Wide-Leg Pants and a woman in washed rose standing in a gym under an IRONKIN banner",
+      blurb: "Heavyweight cotton Milton, cream stitching and washed rose. The first IRONKIN drop." },
   ],
 
   // Leave price null until confirmed; cards and product pages hide it.
@@ -150,6 +148,7 @@ window.IRONKIN = {
     },
     {
       id: "compression-ss-black",
+      hidden: true,  // Collection 002 is not released yet.
       name: "Short-Sleeve Compression",
       collection: "002",
       colour: "Black",
