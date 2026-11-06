@@ -16,14 +16,15 @@ window.IRONKIN = {
     href: "shop.html?collection=001",
     // Set enabled to true once the clips are in assets/video, so the page does not request missing files.
     video: {
-      enabled: false,
-      desktop: "assets/video/hero-training-desktop.mp4",
-      mobile: "assets/video/hero-training-mobile.mp4",
+      enabled: true,
+      // Hammer striking hot metal on an anvil. Stock clip, see assets/video/CREDITS.md.
+      desktop: "assets/video/hero-anvil.mp4",
+      mobile: "assets/video/hero-anvil.mp4",
     },
     poster: {
       desktop: "assets/img/hero-poster.jpg",
       mobile: "assets/img/hero-poster-mobile.jpg",
-      alt: "Five IRONKIN models in oversized black training wear standing in a dark industrial gym",
+      alt: "A hammer striking glowing hot metal on a worn iron anvil",
     },
   },
 
