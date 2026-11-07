@@ -30,7 +30,7 @@ window.IRONKIN = {
 
   // Only Collection 001 is live. Add 002 and 003 back here when their products are ready.
   collections: [
-    { id: "001", name: "THE FIRST REP", label: "WINTER", image: "assets/img/collection-001.jpg",
+    { id: "001", name: "THE FIRST REP", label: "WINTER", image: "assets/img/collection-001.jpg", panel: "assets/img/collection-001-panel.jpg",
       alt: "A man in the black Signature Hoodie and Wide-Leg Pants and a woman in washed rose standing in a gym under an IRONKIN banner",
       blurb: "Heavyweight cotton Milton, cream stitching and washed rose. The first IRONKIN drop." },
   ],
