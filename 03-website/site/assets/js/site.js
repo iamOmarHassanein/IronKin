@@ -33,14 +33,14 @@
     return `
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  ${C.previewMode ? '<div class="announce" role="note">Preview store · checkout not connected yet</div>' : ""}
   <div class="bar">
     <button class="menu-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span></span><span></span></button>
-    <nav id="site-nav" class="site-nav" aria-label="Main">${nav}</nav>
     <a class="brand" href="index.html" aria-label="IRONKIN home">${WORDMARK}</a>
+    <nav id="site-nav" class="site-nav" aria-label="Main">${nav}</nav>
     <button class="bag-btn" aria-label="Open bag, 0 items" aria-haspopup="dialog">${BAG_ICON}<span class="bag-count" hidden>0</span></button>
   </div>
-</header>`;
+</header>
+${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checkout not connected yet</div>' : ""}`;
   }
 
   function footer() {
@@ -86,13 +86,6 @@
 
   function wireShell() {
     document.body.insertAdjacentHTML("afterbegin", header());
-    if (page === "home") {
-      document.body.classList.add("over-hero");
-      const hdr = $(".site-header");
-      const onScroll = () => hdr.classList.toggle("solid", window.scrollY > 40);
-      window.addEventListener("scroll", onScroll, { passive: true });
-      onScroll();
-    }
     document.body.insertAdjacentHTML("beforeend", footer());
     const menu = $(".menu-btn"), nav = $("#site-nav");
     menu.addEventListener("click", () => {
@@ -170,69 +163,66 @@
   // ---------- Home ----------
   function home() {
     const h = C.hero;
-    const c = C.collections[0];
-    const panel = (img, alt, label, title, href, cta, pos = "center") => `
-<section class="panel">
-  <img src="${img}" alt="${esc(alt)}" loading="lazy" style="object-position:${pos}">
-  <div class="panel-copy">
-    ${title ? `<h2 class="display">${title}</h2>` : ""}
-    <p class="bracket">[ ${esc(label)} ]</p>
-    <a class="btn btn-ghost" href="${href}">${esc(cta)}</a>
-  </div>
-</section>`;
+    const title = `${esc(h.title[0])} <span class="slash">/</span> ${esc(h.title[1])}`;
     $("#main").innerHTML = `
-<section class="hero hero-full" aria-label="${esc(h.label)}">
+<section class="hero" aria-label="${esc(h.label)}">
   <picture class="hero-poster">
     <source media="(max-width: 700px)" srcset="${h.poster.mobile}">
-    <img src="${h.poster.desktop}" alt="${esc(h.poster.alt)}" width="1920" height="1080" fetchpriority="high">
+    <img src="${h.poster.desktop}" alt="${esc(h.poster.alt)}" width="1800" height="673" fetchpriority="high">
   </picture>
   <video class="hero-video" muted loop playsinline preload="none" aria-hidden="true" hidden></video>
   <div class="hero-shade" aria-hidden="true"></div>
   <div class="hero-copy">
-    <p class="bracket">[ ${esc(c.id)} / ${esc(c.name)} ]</p>
-    <a class="btn btn-ghost" href="${h.href}">Shop now</a>
+    <p class="hero-label"><span class="rule"></span>${esc(h.label)}<span class="rule"></span></p>
+    <h1 class="display italic">${title}</h1>
+    <a class="btn btn-red" href="${h.href}">${esc(h.cta)}</a>
   </div>
-  <a class="scroll-cue" href="#collection" aria-label="Scroll to the collection"><span></span></a>
   <button class="hero-toggle" hidden aria-label="Pause background video"><span class="i-pause" aria-hidden="true"></span></button>
 </section>
 
-<div id="collection">
-${panel(c.panel || c.image, c.alt, `${c.id} / ${c.name}`, "", `shop.html?collection=${c.id}`, "Shop now", "center 20%")}
-${panel("assets/img/about-crew.jpg", "Five friends in IRONKIN hoodies, wide-leg pants and compression laughing together between sets in a warm-lit gym",
-        "Our story", "Different lives.<br>Shared strength.", "about.html", "Read more", "center 35%")}
-</div>
+<section class="collections" aria-label="Collections">
+  ${C.collections.map((c) => `<article class="feature">
+    <a class="feature-media" href="shop.html?collection=${c.id}"><img src="${c.image}" alt="${esc(c.alt)}" width="1122" height="1402" loading="lazy"></a>
+    <div class="feature-copy">
+      <p class="eyebrow"><span class="rule"></span> ${esc(c.label)}</p>
+      <h2 class="display italic">${c.id} /<br>${esc(c.name)}</h2>
+      <p>${esc(c.blurb || "")}</p>
+      <p class="feature-count">${live.filter((p) => p.collection === c.id).length} pieces</p>
+      <a class="btn btn-red" href="shop.html?collection=${c.id}">Shop ${c.id}</a>
+    </div>
+  </article>`).join("")}
+</section>
 
 <section class="shop-block" aria-labelledby="stc">
-  <h2 id="stc" class="display italic center">Shop the collection</h2>
+  <hr class="red-rule">
+  <h2 id="stc" class="display italic center">Shop the collections</h2>
   ${filterBar("all")}
-  <div class="grid grid-4" id="home-grid">${gridHTML("all")}</div>
+  <div class="grid" id="home-grid">${gridHTML("all")}</div>
+</section>
+
+<section class="about-preview" aria-labelledby="ap">
+  <hr class="red-rule">
+  <div class="about-row">
+    <img src="assets/img/about-crew.jpg" alt="Five friends in IRONKIN hoodies, wide-leg pants and compression laughing together between sets in a warm-lit gym" width="1672" height="941" loading="lazy">
+    <div>
+      <p class="eyebrow">About us</p><span class="rule-short"></span>
+      <h2 id="ap" class="display">Different lives.<br>Shared strength.</h2>
+      <p>Built around training, shared effort and the people beside you.</p>
+      <a class="btn btn-red" href="about.html">Our story</a>
+    </div>
+  </div>
 </section>
 
 <section class="detail-banner" aria-label="Built into every detail">
+  <hr class="red-rule">
   <div class="detail-media"><img src="assets/img/detail-anvil-macro.jpg" alt="Macro of the raised cream split-anvil embroidery on black cotton Milton" width="520" height="454" loading="lazy"></div>
   <p class="detail-text">BUILT INTO EVERY DETAIL.</p>
-</section>
-
-<section class="join" aria-labelledby="join-title">
-  <h2 id="join-title" class="display italic">Join the kin</h2>
-  <p>New drops, restocks and training sessions first. No spam.</p>
-  <form class="join-form" novalidate>
-    <label class="sr-only" for="join-email">Email address</label>
-    <input id="join-email" type="email" placeholder="Your email" autocomplete="email">
-    <button class="btn btn-red" type="submit">Join</button>
-  </form>
-  <p class="note join-note" aria-live="polite"></p>
 </section>`;
 
     const grid = $("#home-grid"), block = $(".shop-block");
     wireFilters(block, (key) => {
       block.querySelectorAll(".chip").forEach((b) => { const on = b.dataset.filter === key; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
       grid.innerHTML = gridHTML(key);
-    });
-    // Sign-up is not connected to an email service yet; nothing is stored or sent.
-    $(".join-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      $(".join-note").textContent = "Sign-up opens with the store launch. Nothing was saved.";
     });
     heroVideo();
   }

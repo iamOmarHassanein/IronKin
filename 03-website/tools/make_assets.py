@@ -151,8 +151,6 @@ crew = Image.open(os.path.join(SRC, "001-campaign-crew.webp")).convert("RGB")
 crew.save(os.path.join(IMG, "about-crew.jpg"), quality=90)
 standing = Image.open(os.path.join(SRC, "001-campaign-standing.webp")).convert("RGB")
 standing.crop((0, 150, 1122, 1230)).save(os.path.join(IMG, "about-closing.jpg"), quality=90)
-# Full-screen home panel: same photo without its baked-in IRONKIN and 001 text.
-standing.crop((0, 125, 1122, 1250)).save(os.path.join(IMG, "collection-001-panel.jpg"), quality=90)
 
 # Construction banner: real macro of the raised split-anvil from the hoodie board.
 b = board("001-signature-hoodie-black-board.jpg")
