@@ -40,6 +40,16 @@ def cutout(im, box, tol=34):
     for sx, sy in [(0, 0), (near.shape[1] - 1, 0), (0, near.shape[0] - 1), (near.shape[1] - 1, near.shape[0] - 1)]:
         if near[sy, sx]:
             cv2.floodFill(mask, flood, (sx, sy), 2)
+    # Floor and contact shadows: the board colour, only darker (same channel ratios). Any such
+    # region joined to the outside background is background too. Cream stitching and logos sit
+    # inside the garment, so they never connect to it.
+    ratio = crop / np.maximum(bg, 1)
+    bright = ratio.mean(2)
+    shadowlike = ((ratio.max(2) - ratio.min(2)) < 0.07) & (bright > 0.33) & (bright < 1.08)
+    joined = (shadowlike | (mask == 2)).astype(np.uint8)
+    n, lab = cv2.connectedComponents(joined, connectivity=4)
+    outside = np.unique(lab[mask == 2])
+    mask[np.isin(lab, outside[outside > 0])] = 2
     alpha = (mask != 2).astype(np.uint8) * 255
     # Background pockets the flood fill could not reach, such as the gap between a cuff and the hem.
     # Only near the bottom, so cream logos and appliques higher up are kept.
@@ -47,14 +57,14 @@ def cutout(im, box, tol=34):
     for i in range(1, n):
         if st[i, cv2.CC_STAT_AREA] > 80 and cen[i][1] > near.shape[0] * 0.85:
             alpha[lab == i] = 0
-    # Floor shadow: light, low-saturation pixels below the lowest garment pixel in each column.
-    rgb = crop.astype(np.float32)
-    gray = rgb.mean(2)
-    sat = (rgb.max(2) - rgb.min(2)) / (rgb.max(2) + 1)
-    garment = (gray < 60) | (sat > 0.16)
+    # Contact shadow: anything below the lowest real garment pixel in each column. Real garment
+    # means near-black fabric or a colour clearly unlike the board (rose, oxblood, cream thread);
+    # the brown shadow under a hem is neither.
+    gray = crop.mean(2)
+    garment = (gray < 40) | ((ratio.max(2) - ratio.min(2)) > 0.12)
     rows = np.arange(garment.shape[0])[:, None]
     lowest = np.where(garment.any(0), (garment * rows).max(0), -1)[None, :]
-    alpha[(rows > lowest + 2) & (sat < 0.16)] = 0
+    alpha[rows > lowest + 2] = 0
     alpha = cv2.morphologyEx(alpha, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
     n, lab, st, _ = cv2.connectedComponentsWithStats((alpha > 0).astype(np.uint8))
     if n > 2:
@@ -151,10 +161,6 @@ crew = Image.open(os.path.join(SRC, "001-campaign-crew.webp")).convert("RGB")
 crew.save(os.path.join(IMG, "about-crew.jpg"), quality=90)
 standing = Image.open(os.path.join(SRC, "001-campaign-standing.webp")).convert("RGB")
 standing.crop((0, 150, 1122, 1230)).save(os.path.join(IMG, "about-closing.jpg"), quality=90)
-
-# Construction banner: real macro of the raised split-anvil from the hoodie board.
-b = board("001-signature-hoodie-black-board.jpg")
-tile(b, (836, 716, 1096, 943), "detail-anvil-macro.jpg")
 
 # IK mark from the Code posters, traced to vector.
 c = board("brand-ironkin-code-board.jpg")

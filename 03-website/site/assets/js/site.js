@@ -160,6 +160,33 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
     });
   }
 
+  // ---------- Motion ----------
+  // Fade elements up as they scroll into view. Without IntersectionObserver, or with reduced
+  // motion, nothing is hidden, so content never depends on the animation.
+  const REVEAL = ".feature, .shop-block h2, .shop-block .filters, .card, .about-row > *, .craft-head, .craft-tile, .set h2, .shop-page h1, .code > *, .closing, .site-footer";
+  let io = null;
+  function reveal(root = document) {
+    if (reducedMotion || !("IntersectionObserver" in window)) return;
+    io = io || new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }), { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    root.querySelectorAll(`${REVEAL}, [data-reveal]`).forEach((el) => {
+      if (el.classList.contains("rv")) return;
+      // Stagger siblings in a grid row.
+      if (el.classList.contains("card")) el.style.setProperty("--d", `${([...el.parentNode.children].indexOf(el) % 3) * 90}ms`);
+      el.classList.add("rv");
+      io.observe(el);
+    });
+  }
+
+  // Close-ups for the details section: image, number, title, line, link.
+  const CRAFT = [
+    ["001-signature-hoodie-black-detail-back.jpg", "01", "Varsity back", "Arched cream IRONKIN applique, raised and stitched down.", "product.html?id=signature-hoodie-black"],
+    ["001-signature-hoodie-black-detail-stitch.jpg", "02", "Exposed overlock", "Cream stitching traces every seam of the black Milton.", "product.html?id=signature-hoodie-black"],
+    ["001-wide-leg-pants-black-detail-pocket.jpg", "03", "Anvil pocket", "A raised split-anvil on the right rear pocket.", "product.html?id=wide-leg-pants-black"],
+    ["001-womens-flare-washed-rose-detail-piping.jpg", "04", "Oxblood piping", "One clean line down each leg of the washed rose flare.", "product.html?id=womens-flared-leggings-washed-rose"],
+  ];
+
   // ---------- Home ----------
   function home() {
     const h = C.hero;
@@ -213,16 +240,28 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
   </div>
 </section>
 
-<section class="detail-banner" aria-label="Built into every detail">
-  <hr class="red-rule">
-  <div class="detail-media"><img src="assets/img/detail-anvil-macro.jpg" alt="Macro of the raised cream split-anvil embroidery on black cotton Milton" width="520" height="454" loading="lazy"></div>
-  <p class="detail-text">BUILT INTO EVERY DETAIL.</p>
+<div class="marquee" aria-hidden="true"><div class="marquee-track">${"<span>Strive</span><i></i><span>Forge</span><i></i><span>Belong</span><i></i>".repeat(4)}</div></div>
+
+<section class="craft" aria-labelledby="craft-title">
+  <div class="craft-head" data-reveal>
+    <p class="eyebrow"><span class="rule"></span> The details</p>
+    <h2 id="craft-title" class="display">Built into<br>every detail.</h2>
+    <p>Small things you notice on the tenth wear, not the first. Every piece in 001 carries them.</p>
+    <a class="text-link" href="shop.html?collection=001">Explore the pieces</a>
+  </div>
+  <div class="craft-grid">
+    ${CRAFT.map(([img, n, title, line, href], i) => `<a class="craft-tile" href="${href}" data-reveal style="--d:${i * 90}ms">
+      <span class="craft-img"><img src="assets/img/${img}" alt="" width="800" height="454" loading="lazy"></span>
+      <span class="craft-cap"><span class="craft-n">${n}</span><span><strong>${title}</strong><span>${line}</span></span></span>
+    </a>`).join("")}
+  </div>
 </section>`;
 
     const grid = $("#home-grid"), block = $(".shop-block");
     wireFilters(block, (key) => {
       block.querySelectorAll(".chip").forEach((b) => { const on = b.dataset.filter === key; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
       grid.innerHTML = gridHTML(key);
+      reveal(grid);
     });
     heroVideo();
   }
@@ -264,6 +303,7 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
     const grid = $("#shop-grid"), count = $(".result-count"), wrap = $(".shop-page");
     const render = () => {
       grid.innerHTML = gridHTML(key);
+      reveal(grid);
       const n = filtered(key).length;
       count.textContent = `${n} product${n === 1 ? "" : "s"}`;
       $("#shop-title").innerHTML = heading();
@@ -379,4 +419,10 @@ ${set.length ? `<section class="set"><hr class="red-rule"><h2 class="display ita
 
   wireShell();
   ({ home, shop, product: productPage, about })[page]?.();
+  reveal();
+  // Header turns solid once the page scrolls.
+  const hdr = $(".site-header");
+  const onScroll = () => hdr.classList.toggle("scrolled", window.scrollY > 8);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 })();
