@@ -112,10 +112,28 @@ def tile(im, box, out, size=None):
     t.save(os.path.join(IMG, out), quality=90)
 
 
-# 001 Signature hoodie, black
+def render(name, x0, x1):
+    """Take one garment, as supplied, from an owner render on a transparent background.
+    Uses the 2x upscaled copy from upscale_boards.py when present. x0, x1 are original pixels."""
+    up = os.path.join(SRC, "upscaled", name)
+    path = up if os.path.exists(up) else os.path.join(SRC, name)
+    im = Image.open(path).convert("RGBA")
+    s = 2 if path == up else 1
+    g = im.crop((x0 * s, 0, x1 * s, im.height))
+    g = g.crop(g.split()[3].point(lambda a: 255 if a > 12 else 0).getbbox())
+    # The renders were cut from white, so edge pixels carry a white tint. Undo the white matte,
+    # then pull the edge in by a pixel so no light fringe shows on the dark card.
+    px = np.asarray(g).astype(np.float32)
+    a = px[..., 3:4] / 255
+    rgb = np.where(a > 0.05, (px[..., :3] - 255 * (1 - a)) / np.maximum(a, 0.05), 0)
+    alpha = Image.fromarray(px[..., 3].astype(np.uint8)).filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.6))
+    return Image.fromarray(np.dstack([np.clip(rgb, 0, 255), np.asarray(alpha)]).astype(np.uint8), "RGBA")
+
+
+# 001 Signature hoodie, black: the owner's render, used as is (side stripes and all).
 b = board("001-signature-hoodie-black-board.jpg")
-card(cutout(b, (131, 42, 566, 588)), "001-signature-hoodie-black-front.jpg")
-card(cutout(b, (831, 42, 573, 588)), "001-signature-hoodie-black-back.jpg")
+card(render("001-signature-hoodie-black-transparent.png", 40, 300), "001-signature-hoodie-black-front.jpg")
+card(render("001-signature-hoodie-black-transparent.png", 310, 580), "001-signature-hoodie-black-back.jpg")
 tile(b, (836, 716, 1096, 943), "001-signature-hoodie-black-detail-chest.jpg")
 tile(b, (571, 716, 816, 943), "001-signature-hoodie-black-detail-stitch.jpg")
 tile(b, (22, 716, 294, 943), "001-signature-hoodie-black-detail-fabric.jpg")
@@ -123,8 +141,8 @@ tile(b, (1116, 716, 1516, 943), "001-signature-hoodie-black-detail-back.jpg")
 
 # 001 Wide-leg pants, black
 b = board("001-wide-leg-pants-black-board.jpg")
-card(cutout(b, (400, 17, 362, 661)), "001-wide-leg-pants-black-front.jpg")
-card(cutout(b, (762, 17, 362, 661)), "001-wide-leg-pants-black-back.jpg")
+card(render("001-wide-leg-pants-black-transparent.png", 155, 304), "001-wide-leg-pants-black-front.jpg")
+card(render("001-wide-leg-pants-black-transparent.png", 303, 449), "001-wide-leg-pants-black-back.jpg")
 tile(b, (1135, 64, 1520, 326), "001-wide-leg-pants-black-detail-drawcord.jpg")
 tile(b, (13, 744, 299, 961), "001-wide-leg-pants-black-detail-pocket.jpg")
 tile(b, (1235, 744, 1523, 961), "001-wide-leg-pants-black-detail-stitch.jpg")

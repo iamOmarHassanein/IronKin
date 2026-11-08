@@ -47,15 +47,31 @@ def upscale_regions(sr, img, regions):
     return out
 
 
+# Owner-supplied renders on a transparent background. Colour goes through the model, alpha is resized.
+RENDERS = ["001-signature-hoodie-black-transparent.png", "001-wide-leg-pants-black-transparent.png"]
+
+
+def upscale_rgba(sr, path):
+    img = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    rgb = upscale(sr, np.ascontiguousarray(img[..., :3]))
+    a = cv2.resize(img[..., 3], (rgb.shape[1], rgb.shape[0]), interpolation=cv2.INTER_CUBIC)
+    return np.dstack([rgb, a])
+
+
 def main():
     model = sys.argv[1]
-    names = sys.argv[2:] or list(REGIONS)
+    names = sys.argv[2:] or list(REGIONS) + RENDERS
     os.makedirs(OUT, exist_ok=True)
     sr = cv2.dnn_superres.DnnSuperResImpl_create()
     sr.readModel(model)
     sr.setModel("edsr", 2)
     for name in names:
         t = time.time()
+        if name in RENDERS:
+            up = upscale_rgba(sr, os.path.join(SRC, name))
+            cv2.imwrite(os.path.join(OUT, name), up)
+            print(f"{name} -> 2x in {time.time() - t:.0f}s", flush=True)
+            continue
         img = cv2.imread(os.path.join(SRC, name))
         up = upscale_regions(sr, img, REGIONS[name]) if name in REGIONS else upscale(sr, img)
         cv2.imwrite(os.path.join(OUT, name.replace(".jpg", ".png")), up)
