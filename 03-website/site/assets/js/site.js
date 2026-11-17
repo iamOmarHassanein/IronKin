@@ -27,7 +27,7 @@
 
   // ---------- Header and footer ----------
   function header() {
-    const links = [["index.html", "Home", "home"], ["shop.html", "Shop", "shop"], ["about.html", "About Us", "about"]];
+    const links = [["index.html", "Home", "home"], ["line.html", "The Line", "line"], ["shop.html", "Shop", "shop"], ["about.html", "About Us", "about"]];
     const nav = links.map(([href, label, key]) =>
       `<a href="${href}"${(key === page || (key === "shop" && page === "product")) ? ' aria-current="page"' : ""}>${label}</a>`).join("");
     return `
@@ -111,7 +111,7 @@ ${C.previewMode ? '<div class="preview-flag" role="note">Preview store · checko
     });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) closeBag(); });
     renderBag();
-    window.IK = { openBag };
+    window.IK = { openBag, addToBag };
   }
 
   function toast(msg) {

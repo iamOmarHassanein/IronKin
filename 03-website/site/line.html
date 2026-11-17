@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Line · IRONKIN</title>
+<meta name="description" content="Collection 001, The First Rep. Walk the line, call the piece in front to the counter.">
+<meta name="theme-color" content="#14040A">
+<link rel="icon" href="assets/brand/ironkin-symbol-bone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,800&family=Barlow:wght@400;500;600&family=Chivo+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css?v=11">
+<link rel="stylesheet" href="assets/css/line.css?v=1">
+</head>
+<body data-page="line" class="page-line">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Ink: roughens the display type so it reads as printed, not rendered. -->
+  <filter id="ink" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<main id="main">
+<section class="ln" data-mode="line" aria-label="The Line, Collection 001">
+  <div class="ln-stage" tabindex="0" aria-label="The line. Use the arrow keys to move it, Enter to shop the piece in front.">
+    <div class="ln-glow" aria-hidden="true"></div>
+    <div class="ln-floor" aria-hidden="true"></div>
+    <svg class="ln-track" aria-hidden="true"><line class="ln-track-line"/><line class="ln-track-dash"/></svg>
+    <div class="ln-crowd"></div>
+    <div class="ln-tickets" aria-hidden="true"></div>
+
+    <div class="ln-copy">
+      <p class="ln-kicker mono">Drop 001 · The First Rep · Doors at 10:00</p>
+      <h1 class="ln-title ink">The First<br>Rep</h1>
+      <p class="ln-blurb mono">Four pieces, one line. Scroll, drag or use the arrow keys to walk it. The one in front is being served.</p>
+    </div>
+
+    <div class="ln-switch" role="group" aria-label="View">
+      <button class="stub stub-sm on" data-mode="line" aria-pressed="true">Line</button>
+      <button class="stub stub-sm" data-mode="lineup" aria-pressed="false">Line-up</button>
+    </div>
+
+    <div class="ln-serving">
+      <span class="ln-tag mono">Now serving</span>
+      <div class="ln-num ink" aria-live="polite"><span class="ln-num-cur">01</span></div>
+      <h2 class="ln-name ink">Signature Hoodie</h2>
+      <button class="stub stub-cta ln-shop"><span class="mono ln-shop-no">No. 01</span><span class="ln-shop-label">Shop the piece <span aria-hidden="true">→</span></span></button>
+    </div>
+
+    <div class="ln-counter">
+      <button class="ln-back mono"><span aria-hidden="true">←</span> Back to the line</button>
+      <p class="ln-quote"></p>
+      <dl class="ln-receipt mono"></dl>
+      <div class="ln-counter-nav">
+        <button class="stub stub-sq ln-prev" aria-label="Previous piece">←</button>
+        <button class="stub stub-ink ln-addset"></button>
+        <button class="stub stub-sq ln-next" aria-label="Next piece">→</button>
+      </div>
+    </div>
+
+    <div class="ln-hud mono" aria-hidden="true">
+      <span class="ln-hud-pos">01 / 04</span>
+      <span class="ln-hud-bar"><i></i></span>
+      <button class="ln-auto" aria-label="Play the line"><span class="ln-auto-ico"></span><span class="ln-auto-txt">Auto</span></button>
+    </div>
+    <div class="ln-hint mono" aria-hidden="true">Scroll / drag to walk the line</div>
+    <div class="ln-loupe" aria-hidden="true"><span class="mono">2×</span></div>
+  </div>
+
+  <aside class="ln-panel" aria-label="Pieces for the one being served"></aside>
+</section>
+</main>
+<div class="ln-cursor" aria-hidden="true"><span class="mono"></span></div>
+
+<script src="assets/js/catalog.js?v=11"></script>
+<script src="assets/js/site.js?v=11"></script>
+<script src="assets/js/line.js?v=1"></script>
+</body>
+</html>
