@@ -81,7 +81,16 @@ window.IK_DATA = {
     },
   ],
 
-  // The three looks on the Home stage. Each is dressed with the product cut-outs.
+  // The Collection 001 rail on Home and the Collection page, left to right.
+  // Each item hangs one or two pieces. h: garment height (1 = tallest), r: cut-out width / height.
+  rail: [
+    { name: "Wide-Leg Pant", link: "wide-leg-pant", pieces: [{ id: "wide-leg-pant", h: 0.98, r: 0.543 }] },
+    { name: "Signature Hoodie", link: "signature-hoodie", pieces: [{ id: "signature-hoodie", h: 0.94, r: 0.953 }] },
+    { name: "Compression Tee", link: "compression-tee", pieces: [{ id: "compression-tee", h: 0.72, r: 0.856 }] },
+    { name: "Washed Rose Set", link: "fitted-tee", pieces: [{ id: "fitted-tee", h: 0.56, r: 0.815 }, { id: "flared-pant", h: 1, r: 0.442 }] },
+  ],
+
+  // The three looks on the Shop the look page. Each is dressed with the product cut-outs.
   looks: [
     { id: "strength", name: "Strength", products: ["signature-hoodie", "wide-leg-pant"], top: "p-hoodie-black-front", bottom: "p-pants-black-front", topW: 1.42, photo: "c-strength" },
     { id: "jiujitsu", name: "Jiu-Jitsu", products: ["compression-tee"], top: "p-compression-black-front", bottom: null, topW: 1, photo: "c-jiujitsu" },

@@ -16,17 +16,18 @@ Then open http://localhost:4173.
 
 | Page | File | What it does |
 |---|---|---|
-| Home | `index.html` | Three looks (Strength, Jiu-Jitsu, Padel) on the amber floor light. Horizontal trackpad scroll, drag, swipe, arrows, tabs or arrow keys move them. The Shop the look panel follows the active look. `?look=padel` opens a look. |
-| Collection 001 | `collection.html` | Garments on a steel rail with swaying hangers, plus a product grid. |
+| Home | `index.html` | Opens on the full-screen athlete image only. Scrolling down shows the Collection 001 rail: bronze rod, wooden hangers, drag, swipe, trackpad or arrows to browse, progress bar underneath. Click a garment to open it. |
+| Shop the look | `look.html` | Three looks (Strength, Jiu-Jitsu, Padel) on the amber floor light, with the Shop the look panel. `?look=padel` opens a look. |
+| Collection 001 | `collection.html` | The same rail as Home, plus a product grid. |
 | Product | `product.html?id=...` | Gallery (front, back, on-body, details), size ruler, size guide drawer, Add to cart. |
-| Campaign | `campaign.html` | Three sport panels, each linking to its look on Home. |
+| Campaign | `campaign.html` | Three sport panels, each linking to its look on the Shop the look page. |
 | Our Story | `story.html` | Brand introduction with the flag photo. |
 | Checkout | `checkout.html` | Demo checkout: validates, then shows an order confirmation. Nothing is sent or charged. |
 | Help | `info.html` | Contact, Shipping & Returns, Privacy (placeholders until the brand supplies them). |
 
 ## Edit content
 
-Everything lives in `site/assets/js/data.js`: products, prices (`null` = "Price at launch"), sizes, sold-out sizes, the three looks, payment options and countries.
+Everything lives in `site/assets/js/data.js`: products, prices (`null` = "Price at launch"), sizes, sold-out sizes, the rail order (`rail`), the three looks, payment options and countries.
 
 ## Images
 
@@ -38,6 +39,7 @@ python 03-website/tools/v2_assets.py
 
 - `p-*.webp`: transparent product cut-outs (and `-sm` versions for the panel and cart).
 - `d-*.webp`: construction close-ups cropped from the product photos.
+- `hero-athletes.webp` (and `-m` phone crop): the Home opening image, from `source-v2/hero-athletes.webp`.
 - `c-*.webp`: campaign and story photos, cropped from the brand mockups. Replace with the real shoot.
 - The Fitted Tee still uses the older board render; send a new front and back photo to match the others.
 

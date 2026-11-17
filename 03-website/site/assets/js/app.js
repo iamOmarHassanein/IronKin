@@ -36,20 +36,21 @@
 
   // ================================================================ shell
   function shell() {
-    const nav = [["collection.html", "Collection 001", "collection"], ["campaign.html", "Campaign", "campaign"], ["story.html", "Our Story", "story"]];
+    const nav = [["collection.html", "Collection 001", "collection"], ["campaign.html", "Campaign", "campaign"]];
+    const here = (k) => k === page || (k === "collection" && (page === "product" || page === "home")) || (k === "campaign" && page === "look");
     document.body.insertAdjacentHTML("afterbegin", `
 <a class="skip" href="#main">Skip to content</a>
 <header class="hdr"><div class="hdr-in">
   <a class="logo" href="index.html" aria-label="IRONKIN home"><img class="sym" src="assets/brand/ironkin-symbol-bone.svg" alt="" width="58" height="31"><img class="wm" src="assets/brand/ironkin-wordmark-bone.svg" alt="IRONKIN" width="140" height="24"></a>
-  <div style="display:flex;align-items:center;gap:clamp(22px,3.2vw,56px)">
-    <nav class="nav" id="nav" aria-label="Main">${nav.map(([h, l, k]) => `<a href="${h}"${k === page || (k === "collection" && page === "product") ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-    <button class="cart-btn" type="button" aria-haspopup="dialog">Cart<span class="cart-count" aria-hidden="true">0</span><span class="sr cart-sr"></span></button>
+  <nav class="nav" id="nav" aria-label="Main">${nav.map(([h, l, k]) => `<a href="${h}"${here(k) ? ' aria-current="page"' : ""}>${l}</a>`).join("")}<a class="nav-extra" href="story.html"${page === "story" ? ' aria-current="page"' : ""}>Our Story</a></nav>
+  <div class="hdr-end">
+    <button class="cart-btn" type="button" aria-haspopup="dialog">Bag (<span class="cart-count">0</span>)<span class="sr cart-sr"></span></button>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu"><span></span><span></span></button>
   </div>
 </div></header>`);
     document.body.insertAdjacentHTML("beforeend", `
 <footer class="ftr">
-  <a href="collection.html">Collection 001</a><a href="campaign.html">Campaign</a>
+  <a href="collection.html">Collection 001</a><a href="campaign.html">Campaign</a><a href="story.html">Our Story</a>
   <a href="info.html#contact">Contact</a><a href="info.html#shipping">Shipping &amp; Returns</a><a href="info.html#privacy">Privacy</a>
   <small>© IRONKIN · Egyptian sportswear</small>
 </footer>
@@ -94,7 +95,7 @@
   function updateCount(bump) {
     const n = cart.count(), el = $(".cart-count");
     if (!el) return;
-    el.textContent = n; el.hidden = n === 0;
+    el.textContent = n;
     $(".cart-sr").textContent = `, ${n} item${n === 1 ? "" : "s"}`;
     if (bump && !reduced) { el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
   }
@@ -143,13 +144,13 @@
     const n = all[(i + (e.key === "ArrowRight" ? 1 : -1) + all.length) % all.length]; n.focus(); n.click();
   });
 
-  // ================================================================ HOME
-  function home() {
+  // ================================================================ SHOP THE LOOK (look.html)
+  function look() {
     const looks = D.looks, N = looks.length;
     const q = new URLSearchParams(location.search).get("look");
     const start = Math.max(0, looks.findIndex((l) => l.id === q));
     $("#main").innerHTML = `
-<section class="home" aria-label="Collection 001">
+<section class="home" aria-label="Shop the look">
   <div class="stage" tabindex="0" aria-roledescription="carousel" aria-label="Looks. Use the left and right arrow keys to change look.">
     <div class="floor" aria-hidden="true"></div>
     <div class="light-strip" aria-hidden="true"></div>
@@ -314,52 +315,63 @@
     requestAnimationFrame(frame);
   }
 
-  // ================================================================ COLLECTION
-  const HANGER_TOP = `<svg class="hanger" viewBox="0 0 200 64" aria-hidden="true">
-    <path d="M100 30 V15 a8.5 8.5 0 1 1 8.5 -8.5" fill="none" stroke="#9A9893" stroke-width="3.2" stroke-linecap="round"/>
-    <path d="M100 28 L12 58 Q6 61 12 62 L188 62 Q194 61 188 58 Z" fill="#141010" stroke="#0A0808" stroke-width="2"/></svg>`;
-  const HANGER_BOTTOM = `<svg class="hanger" viewBox="0 0 200 64" aria-hidden="true">
-    <path d="M100 32 V15 a8.5 8.5 0 1 1 8.5 -8.5" fill="none" stroke="#9A9893" stroke-width="3.2" stroke-linecap="round"/>
-    <rect x="36" y="32" width="128" height="9" fill="#141010"/><rect x="42" y="40" width="10" height="22" fill="#1E1A1A"/><rect x="148" y="40" width="10" height="22" fill="#1E1A1A"/></svg>`;
+  // ================================================================ COLLECTION RAIL (Home and Collection)
+  const HOOK = (y) => `<path d="M100 ${y} V17 a8 8 0 1 1 8 -8" fill="none" stroke="url(#ik-brass)" stroke-width="3" stroke-linecap="round"/>`;
+  const HANGER_TOP = `<svg class="hanger" viewBox="0 0 200 60" aria-hidden="true">${HOOK(30)}
+    <path d="M100 26 C 78 30 34 44 10 52 Q4 55 9 58 L191 58 Q196 55 190 52 C 166 44 122 30 100 26 Z" fill="url(#ik-wood)"/>
+    <path d="M14 53 C 40 45 80 33 100 29 C 120 33 160 45 186 53" fill="none" stroke="rgba(255,220,180,.18)" stroke-width="1.2"/></svg>`;
+  const HANGER_BOTTOM = `<svg class="hanger" viewBox="0 0 200 60" aria-hidden="true">${HOOK(30)}
+    <rect x="6" y="28" width="188" height="10" rx="2" fill="url(#ik-wood)"/>
+    <rect x="22" y="36" width="12" height="24" rx="1.5" fill="url(#ik-brass)"/><rect x="166" y="36" width="12" height="24" rx="1.5" fill="url(#ik-brass)"/></svg>`;
+  const SVG_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <linearGradient id="ik-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A3A26"/><stop offset=".5" stop-color="#3A2216"/><stop offset="1" stop-color="#1E100A"/></linearGradient>
+    <linearGradient id="ik-brass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E4E2C"/><stop offset=".45" stop-color="#C9A06A"/><stop offset="1" stop-color="#5A3D20"/></linearGradient></defs></svg>`;
 
-  function collection() {
-    const items = D.products;
-    $("#main").innerHTML = `
-<section class="col-stage" aria-label="Collection 001 rail">
-  <div class="col-intro">
-    <h1 class="head">Collection<br>001</h1>
-    <p>Drag to browse</p>
-    <div class="arrows"><button class="icon-btn amber rail-prev" aria-label="Previous garment">${CHEV_L}</button><button class="icon-btn amber rail-next" aria-label="Next garment">${CHEV_R}</button></div>
-  </div>
+  function rail(heading) {
+    return `${SVG_DEFS}
+<section class="rail-sec" id="collection" aria-label="Collection 001">
+  <div class="rail-top"><${heading} class="head">Collection 001</${heading}><p>Drag to browse</p></div>
   <div class="rail-wrap" tabindex="0" aria-label="Garment rail. Use the left and right arrow keys to browse.">
-    <div class="rail-bar" aria-hidden="true"></div>
-    <div class="rail-track">${items.map((p, i) => `
-      <div class="hang ${p.hanger}" data-i="${i}">
-        <div class="hang-swing">${p.hanger === "top" ? HANGER_TOP : HANGER_BOTTOM}
-          <img src="${media(p.cut)}" srcset="${cutSet(p.cut)}" sizes="(max-width: 860px) 60vw, 22vw" alt="${esc(p.name)}, ${esc(p.colour)}" draggable="false"></div>
-        <a class="hang-name" href="product.html?id=${p.id}">${esc(p.name)}</a>
+    <div class="rod" aria-hidden="true"><i class="cap l"></i><i class="cap r"></i></div>
+    <div class="rail-track">${D.rail.map((it, i) => `
+      <div class="hang" data-i="${i}" data-href="product.html?id=${it.link}">
+        <div class="hang-pieces">${it.pieces.map((pc) => { const p = P(pc.id); return `
+          <div class="piece ${p.hanger}" style="--h:${pc.h};--r:${pc.r}">
+            <div class="swing">${p.hanger === "top" ? HANGER_TOP : HANGER_BOTTOM}
+              <img src="${media(p.cut)}" srcset="${cutSet(p.cut)}" sizes="(max-width: 860px) 50vw, 26vw" alt="${esc(p.name)}, ${esc(p.colour)}" draggable="false"></div>
+          </div>`; }).join("")}</div>
+        <a class="hang-name" href="product.html?id=${it.link}">${esc(it.name)}</a>
       </div>`).join("")}</div>
   </div>
-</section>
-<section class="grid-sec" aria-labelledby="all">
-  <h2 class="head" id="all">All pieces</h2>
-  <div class="grid">${items.map((p) => `
-    <a class="card" href="product.html?id=${p.id}"><div class="card-img"><img src="media/${p.cut}-sm.webp" alt="" loading="lazy"></div>
-    <div class="card-body"><h3>${esc(p.name)}</h3><p>${esc(p.colour)}${p.price != null ? " · " + money(p.price) : ""}</p></div></a>`).join("")}</div>
+  <div class="rail-ctrl">
+    <button class="rc-btn rail-prev" type="button" aria-label="Previous garment"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <div class="rc-track" aria-hidden="true"><span class="rc-thumb"></span></div>
+    <button class="rc-btn rail-next" type="button" aria-label="Next garment"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>
+  </div>
 </section>`;
+  }
 
-    const wrapEl = $(".rail-wrap"), track = $(".rail-track"), hangs = $$(".hang");
-    const swing = hangs.map((h) => ({ el: $(".hang-swing", h), a: 0, v: 0 }));
-    let x = 0, tx = 0, prevX = 0, minX = 0, idx = 0;
-    const measure = () => { minX = Math.min(0, wrapEl.clientWidth - track.scrollWidth); tx = Math.max(minX, Math.min(0, tx)); };
-    const stepW = () => hangs[0].offsetWidth + parseFloat(getComputedStyle(track).columnGap || 32);
-    const goTo = (i) => { idx = Math.max(0, Math.min(hangs.length - 1, i)); tx = Math.max(minX, Math.min(0, -hangs[idx].offsetLeft + (wrapEl.clientWidth - hangs[idx].offsetWidth) / 2)); };
-    $(".rail-prev").addEventListener("click", () => goTo(nearest() - 1));
-    $(".rail-next").addEventListener("click", () => goTo(nearest() + 1));
-    wrapEl.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); goTo(nearest() + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); goTo(nearest() - 1); } });
-    function nearest() { const c = -tx + wrapEl.clientWidth / 2; let best = 0, bd = 1e9; hangs.forEach((h, i) => { const d = Math.abs(h.offsetLeft + h.offsetWidth / 2 - c); if (d < bd) { bd = d; best = i; } }); return best; }
+  function railInit() {
+    const wrapEl = $(".rail-wrap"), track = $(".rail-track"), hangs = $$(".hang", track), thumb = $(".rc-thumb"), bar = $(".rc-track");
+    const swing = $$(".swing", track).map((el) => ({ el, hang: +el.closest(".hang").dataset.i, a: 0, v: 0, r: "" }));
+    let x = 0, tx = 0, prevX = 0, minX = 0, hover = -1, lastTf = "", lastN = -1, lastBar = "", lastEnds = "";
+    const prevBtn = $(".rail-prev"), nextBtn = $(".rail-next");
+    const lead = Math.max(0, D.rail.findIndex((r) => r.link === "signature-hoodie"));
+    const clamp = (v) => Math.max(minX, Math.min(0, v));
+    const measure = () => { minX = Math.min(0, wrapEl.clientWidth - track.scrollWidth); tx = clamp(tx); lastBar = ""; };
+    const center = (i) => clamp(-hangs[i].offsetLeft + (wrapEl.clientWidth - hangs[i].offsetWidth) / 2);
+    function nearest(at) { const c = -at + wrapEl.clientWidth / 2; let best = 0, bd = 1e9; hangs.forEach((h, i) => { const d = Math.abs(h.offsetLeft + h.offsetWidth / 2 - c); if (d < bd) { bd = d; best = i; } }); return best; }
+    // Step to the next garment that actually moves the rail; at the ends, stop.
+    function stepBy(n) {
+      let i = nearest(tx);
+      for (;;) { i += n; if (i < 0 || i >= hangs.length) return; const t = center(i); if (Math.abs(t - tx) > 2) { tx = t; return; } }
+    }
+    $(".rail-prev").addEventListener("click", () => stepBy(-1));
+    $(".rail-next").addEventListener("click", () => stepBy(1));
+    wrapEl.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); stepBy(1); } if (e.key === "ArrowLeft") { e.preventDefault(); stepBy(-1); } });
 
-    wrapEl.addEventListener("wheel", (e) => { if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); tx = Math.max(minX, Math.min(0, tx - e.deltaX)); }, { passive: false });
+    // Horizontal trackpad scrolling only; vertical scrolling stays with the page.
+    wrapEl.addEventListener("wheel", (e) => { if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); tx = clamp(tx - e.deltaX); }, { passive: false });
     let drag = null;
     wrapEl.addEventListener("pointerdown", (e) => { if (e.button !== 0 || e.target.closest("a, button")) return; drag = { x: e.clientX, y: e.clientY, t: tx, moved: false, id: e.pointerId }; });
     wrapEl.addEventListener("pointermove", (e) => {
@@ -368,17 +380,27 @@
       if (!drag.moved) { if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(e.clientY - drag.y)) { drag.moved = true; wrapEl.classList.add("dragging"); wrapEl.setPointerCapture(e.pointerId); } else return; }
       const raw = drag.t + dx; tx = raw > 0 ? raw * 0.3 : raw < minX ? minX + (raw - minX) * 0.3 : raw;
     });
-    const up = (e) => { if (!drag || drag.id !== e.pointerId) return; drag = null; wrapEl.classList.remove("dragging"); tx = Math.max(minX, Math.min(0, tx)); };
-    wrapEl.addEventListener("pointerup", up); wrapEl.addEventListener("pointercancel", up);
+    wrapEl.addEventListener("pointerup", (e) => {
+      if (!drag || drag.id !== e.pointerId) return;
+      const d = drag; drag = null; wrapEl.classList.remove("dragging"); tx = clamp(tx);
+      // A click (no drag) on a garment opens its product page.
+      if (!d.moved) { const h = e.target.closest(".hang"); if (h) location.href = h.dataset.href; }
+    });
+    wrapEl.addEventListener("pointercancel", (e) => { if (drag && drag.id === e.pointerId) { drag = null; wrapEl.classList.remove("dragging"); tx = clamp(tx); } });
+    // Pointing at a garment makes it the active one and gives it a small nudge.
+    hangs.forEach((h, i) => {
+      h.addEventListener("pointerenter", (e) => { if (e.pointerType !== "mouse" || drag) return; hover = i; if (!reduced) swing.forEach((s) => { if (s.hang === i) s.v += 0.5; }); });
+      h.addEventListener("pointerleave", () => { if (hover === i) hover = -1; });
+      $(".hang-name", h).addEventListener("focus", () => { tx = center(i); });
+    });
 
-    let lastTf = "", lastN = -1;
     (function loop() {
       x += (tx - x) * (reduced ? 1 : 0.14);
       if (Math.abs(tx - x) < 0.05) x = tx;
       const tf = `translate3d(${x.toFixed(1)}px,0,0)`;
       if (tf !== lastTf) { track.style.transform = lastTf = tf; }
       const vel = x - prevX; prevX = x;
-      // Each hanger sways around its hook: pushed by the rail's movement, pulled back by a spring.
+      // Each piece sways around its hook: pushed by the rail's movement, pulled back by a spring.
       if (!reduced) swing.forEach((s, i) => {
         s.v += -vel * 0.045 * (1 + (i % 2) * 0.25) - s.a * 0.06; s.v *= 0.9; s.a += s.v;
         s.a = Math.max(-9, Math.min(9, s.a));
@@ -386,12 +408,45 @@
         const r = s.a ? `rotate(${s.a.toFixed(2)}deg)` : "";
         if (r !== s.r) { s.el.style.transform = s.r = r; }
       });
-      const n = nearest(); if (n !== lastN) { lastN = n; hangs.forEach((h, i) => h.classList.toggle("active", i === n)); }
+      // When the whole rail fits, the hoodie leads; otherwise the garment nearest the centre.
+      const n = hover > -1 ? hover : minX ? nearest(x) : lead;
+      if (n !== lastN) { lastN = n; hangs.forEach((h, i) => h.classList.toggle("active", i === n)); }
+      // Progress bar: the thumb is the visible share of the rail, placed by scroll progress.
+      const tw = bar.clientWidth, w = Math.max(40, tw * (minX ? wrapEl.clientWidth / track.scrollWidth : 1));
+      const left = minX ? (x / minX) * (tw - w) : 0, b = `${w.toFixed(1)}|${left.toFixed(1)}`;
+      if (b !== lastBar) { lastBar = b; thumb.style.width = w.toFixed(1) + "px"; thumb.style.transform = `translateX(${left.toFixed(1)}px)`; }
+      const ends = `${tx >= -1}|${tx <= minX + 1}`;
+      if (ends !== lastEnds) { lastEnds = ends; prevBtn.disabled = tx >= -1; nextBtn.disabled = tx <= minX + 1; }
       requestAnimationFrame(loop);
     })();
     if ("ResizeObserver" in window) new ResizeObserver(measure).observe(wrapEl); else addEventListener("resize", measure);
-    addEventListener("load", () => { measure(); goTo(1); });
-    measure(); goTo(1);
+    addEventListener("load", measure);
+    measure();
+  }
+
+  // ================================================================ HOME: opening image, then the rail
+  function home() {
+    $(".skip").insertAdjacentHTML("afterend", `
+<section class="hero" aria-label="IRONKIN Collection 001">
+  <picture>
+    <source media="(max-width: 700px) and (orientation: portrait)" srcset="media/hero-athletes-m.webp">
+    <img src="media/hero-athletes.webp" alt="Three IRONKIN athletes in Collection 001 on a burgundy floor crossed by an amber light line" fetchpriority="high">
+  </picture>
+  <a class="hero-cue" href="#collection"><span>Scroll</span><i aria-hidden="true"></i></a>
+</section>`);
+    $("#main").innerHTML = rail("h1");
+    railInit();
+  }
+
+  function collection() {
+    $("#main").innerHTML = rail("h1") + `
+<section class="grid-sec" aria-labelledby="all">
+  <h2 class="head" id="all">All pieces</h2>
+  <div class="grid">${D.products.map((p) => `
+    <a class="card" href="product.html?id=${p.id}"><div class="card-img"><img src="media/${p.cut}-sm.webp" alt="" loading="lazy"></div>
+    <div class="card-body"><h3>${esc(p.name)}</h3><p>${esc(p.colour)}${p.price != null ? " · " + money(p.price) : ""}</p></div></a>`).join("")}</div>
+</section>`;
+    railInit();
   }
 
   // ================================================================ PRODUCT
@@ -452,7 +507,7 @@
   // ================================================================ CAMPAIGN / STORY / INFO
   function campaign() {
     $("#main").innerHTML = `<section class="camp"><h1 class="head">Collection 001 Campaign</h1>
-      <div class="camp-grid">${D.looks.map((l) => `<a class="camp-panel" href="index.html?look=${l.id}#shop">
+      <div class="camp-grid">${D.looks.map((l) => `<a class="camp-panel" href="look.html?look=${l.id}#shop">
         <img src="${media(l.photo)}" alt="${esc(l.name)} look, Collection 001" loading="lazy">
         <div class="camp-cap"><h2 class="head">${esc(l.name)}</h2><span>Shop the look <span aria-hidden="true">›</span></span></div></a>`).join("")}</div></section>`;
   }
@@ -533,6 +588,6 @@
 
   // ================================================================ go
   shell();
-  ({ home, collection, product, campaign, story, info, checkout })[page]?.();
-  if (page === "home" && location.hash === "#shop") setTimeout(() => $("#shop")?.scrollIntoView(), 50);
+  ({ home, look, collection, product, campaign, story, info, checkout })[page]?.();
+  if (page === "look" && location.hash === "#shop") setTimeout(() => $("#shop")?.scrollIntoView(), 50);
 })();
