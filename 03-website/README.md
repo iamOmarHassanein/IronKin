@@ -1,39 +1,47 @@
-# Store and landing pages
+# IRONKIN website (v2, Collection 001)
 
-The IRONKIN storefront lives in [site/](site/): plain HTML, CSS and JavaScript, no build step.
+Static site in `site/`. No build step.
 
-## Run it locally
+## Run it
 
-Double-click `03-website/start-site.bat`. It opens http://localhost:4173 and keeps the site running until you close its window.
-
-Or from a terminal in the repo:
+Double-click `start-site.bat`, or from this folder:
 
 ```bash
-python -m http.server 4173 --bind 127.0.0.1 --directory 03-website/site
+python -m http.server 4173 --directory site
 ```
 
 Then open http://localhost:4173.
 
 ## Pages
 
-| Page | File | Notes |
+| Page | File | What it does |
 |---|---|---|
-| Home | `site/index.html` | Hero video slot, collection tiles, Shop the Collections, About preview, detail banner |
-| Shop | `site/shop.html` | Filters: All, Winter (001), Women. Links: `?collection=001`, `?filter=women`. Only Collection 001 is live; the compression top is kept in `catalog.js` with `hidden: true` |
-| Product | `site/product.html?id=<product id>` | Gallery, size, add to bag, Fit & details, Complete the Set |
-| About Us | `site/about.html` | The IRONKIN Code panels as live text |
+| Home | `index.html` | Three looks (Strength, Jiu-Jitsu, Padel) on the amber floor light. Horizontal trackpad scroll, drag, swipe, arrows, tabs or arrow keys move them. The Shop the look panel follows the active look. `?look=padel` opens a look. |
+| Collection 001 | `collection.html` | Garments on a steel rail with swaying hangers, plus a product grid. |
+| Product | `product.html?id=...` | Gallery (front, back, on-body, details), size ruler, size guide drawer, Add to cart. |
+| Campaign | `campaign.html` | Three sport panels, each linking to its look on Home. |
+| Our Story | `story.html` | Brand introduction with the flag photo. |
+| Checkout | `checkout.html` | Demo checkout: validates, then shows an order confirmation. Nothing is sent or charged. |
+| Help | `info.html` | Contact, Shipping & Returns, Privacy (placeholders until the brand supplies them). |
 
-## Change content
+## Edit content
 
-Everything editable is in [site/assets/js/catalog.js](site/assets/js/catalog.js): the hero (collection, headline, button), collections, products, prices, sizes, footer links, preview mode and the checkout URL.
+Everything lives in `site/assets/js/data.js`: products, prices (`null` = "Price at launch"), sizes, sold-out sizes, the three looks, payment options and countries.
 
-- **Hero video:** add `site/assets/video/hero-training-desktop.mp4` and `hero-training-mobile.mp4`. Until then the poster shows.
-- **Images:** replace a file in `site/assets/img/` with the same name.
-- **Prices:** set `price` on a product, for example `"EGP 1,450"`. Cards and product pages hide prices while they are `null`.
-- **Collection 003:** when its products arrive, add them with `collection: "003"` and switch the hero as described in `catalog.js`.
+## Images
 
-## Status
+`site/media/` is built by `tools/v2_assets.py` from `source-v2/` (the supplied product photos and mockups):
 
-- Preview store: the bag works in the visitor's browser, checkout is not connected. Set `checkoutUrl` or connect a store platform to sell.
-- Product images are cut from the supplied product boards by `tools/make_assets.py`, after a 2x EDSR upscale by `tools/upscale_boards.py` (about 25 minutes on a laptop CPU; outputs in `source-boards/upscaled/`, not in git). The boards are 1536 px wide, so for sharper product shots supply higher-resolution boards or photos.
-- Not yet supplied: prices, size runs, fabric composition, care, shipping, social links, Collection 003 products, the hero film.
+```bash
+python 03-website/tools/v2_assets.py
+```
+
+- `p-*.webp`: transparent product cut-outs (and `-sm` versions for the panel and cart).
+- `d-*.webp`: construction close-ups cropped from the product photos.
+- `c-*.webp`: campaign and story photos, cropped from the brand mockups. Replace with the real shoot.
+- The Fitted Tee still uses the older board render; send a new front and back photo to match the others.
+
+## Not connected yet
+
+- Checkout runs as a demo (`demoCheckout: true`). Card payment is off until the commerce platform is connected.
+- Prices, garment measurements, contact, shipping and privacy details are placeholders.
