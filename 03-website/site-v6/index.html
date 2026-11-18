@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRONKIN · The Rite</title>
+<meta name="description" content="IRONKIN is a temple for those who honour the ritual of training. Collection 001: strength, jiu-jitsu, padel. Made in Egypt.">
+<meta name="theme-color" content="#070405">
+<link rel="icon" href="brand/ironkin-symbol-bone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/rite-strength.webp">
+<link rel="stylesheet" href="assets/v6.css?v=1">
+</head>
+<body>
+<a class="skip" href="#collection">Skip to the collection</a>
+
+<header class="hdr" id="hdr">
+  <a class="brand" href="#top"><img src="brand/ironkin-wordmark-bone.svg" alt="IRONKIN" width="112" height="19"><span class="clock">Cairo · <span id="clock">UTC+02:00</span></span></a>
+  <nav class="cols" aria-label="Main">
+    <div><a href="#rite">About us</a><a href="#collection">Collection <sup>(05)</sup></a></div>
+    <div><a href="#rite" data-ch="1">Disciplines <sup>(03)</sup></a><a href="#kin">The kin</a></div>
+    <div><a href="#lab">Lab</a></div>
+  </nav>
+  <button class="bag-btn" type="button" aria-haspopup="dialog">Bag (<span class="bag-n">0</span>) <span aria-hidden="true">↗</span></button>
+</header>
+
+<main>
+  <!-- 1. The rite: a pinned temple scene; each chapter brings a new figure out of the red light -->
+  <section class="rite" id="rite" aria-label="About IRONKIN and its three disciplines">
+    <div class="rite-pin" id="top">
+      <div class="figs" aria-hidden="true">
+        <img class="fig on" src="media/rite-strength.webp" alt="">
+        <img class="fig" src="media/rite-strength.webp" alt="" style="--op:50% 4%">
+        <img class="fig" src="media/rite-jiujitsu.webp" alt="" loading="lazy">
+        <img class="fig" src="media/rite-padel.webp" alt="" loading="lazy">
+      </div>
+      <canvas class="embers" id="embers" aria-hidden="true"></canvas>
+      <div class="grain" aria-hidden="true"></div>
+      <div class="vign" aria-hidden="true"></div>
+
+      <div class="chapters">
+        <article class="ch on">
+          <p class="ch-k">About IRONKIN</p>
+          <h1 class="ch-t">IRONKIN is a temple for those who honour the ritual of training: the weight of the bar, the discipline of the mat, the precision of the court. Every piece is a vow, sealed in burgundy and cream.</h1>
+        </article>
+        <article class="ch">
+          <p class="ch-k">Rite I · Strength</p>
+          <h2 class="ch-t">Under the bar there is no audience. Only the weight, the breath, and the piece you trust to move with you. <em>Signature Hoodie · Wide-Leg Pant.</em></h2>
+        </article>
+        <article class="ch">
+          <p class="ch-k">Rite II · Jiu-Jitsu</p>
+          <h2 class="ch-t">On the mat, the kit is a second skin. Cream overlock that holds through every scramble, every grip, every roll. <em>Compression Tee.</em></h2>
+        </article>
+        <article class="ch">
+          <p class="ch-k">Rite III · Padel</p>
+          <h2 class="ch-t">On the court, precision is a form of devotion. A fitted line that follows the swing and never fights it. <em>Fitted Tee · Flared Pant.</em></h2>
+        </article>
+      </div>
+
+      <p class="big-mark" aria-hidden="true"><span id="roman"></span></p>
+      <div class="prog">
+        <div class="track" aria-hidden="true"><i id="thumb"></i></div>
+        <a class="keep" href="#collection">Keep scrolling <span class="x" aria-hidden="true"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Collection -->
+  <section class="collection" id="collection" aria-labelledby="col-title">
+    <div class="sec-top">
+      <p class="k">Collection <sup>(05)</sup></p>
+      <h2 class="h" id="col-title">Five pieces. <em>One vow.</em></h2>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- 3. Lab -->
+  <section class="lab" id="lab" aria-labelledby="lab-title">
+    <div class="sec-top">
+      <p class="k">Lab</p>
+      <h2 class="h" id="lab-title">Tested where it is <em>worn.</em></h2>
+    </div>
+    <ol class="facts">
+      <li><span>01</span><h3>Heavy cotton</h3><p>A dense hand that keeps its shape under load and softens with every wash.</p></li>
+      <li><span>02</span><h3>Cream overlock</h3><p>Every seam is finished in cream overlock: our signature, and the part that takes the strain.</p></li>
+      <li><span>03</span><h3>The split-anvil</h3><p>Our mark on the chest. Iron that has been tested, broken and forged again.</p></li>
+    </ol>
+  </section>
+
+  <!-- 4. The kin -->
+  <section class="kin" id="kin" aria-labelledby="kin-title">
+    <figure class="kin-fig"><img src="media/rite-kin.webp" alt="Three IRONKIN athletes in red light: strength, jiu-jitsu and padel" loading="lazy"></figure>
+    <div class="kin-txt">
+      <p class="k">The kin</p>
+      <h2 class="h" id="kin-title">Forged by those <em>who train.</em></h2>
+      <a class="cta" href="#collection">Shop Collection 001 <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-row"><span>IRONKIN · Made in Egypt</span><span>Preview site · prices and checkout open at launch</span></div>
+  <div class="foot-mark" aria-hidden="true"></div>
+</footer>
+
+<div class="drawer" id="bag" role="dialog" aria-modal="true" aria-labelledby="bag-title" hidden>
+  <div class="scrim" data-close></div>
+  <aside class="sheet">
+    <div class="sheet-head"><h2 id="bag-title">Your bag</h2><button class="close" type="button" data-close>Close</button></div>
+    <div class="bag-lines"></div>
+    <p class="note">Checkout opens when the store launches. Your bag is kept in this browser.</p>
+  </aside>
+</div>
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+<script src="assets/v6.js?v=1"></script>
+</body>
+</html>
