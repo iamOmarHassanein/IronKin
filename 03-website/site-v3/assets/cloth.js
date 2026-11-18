@@ -280,7 +280,7 @@
   let last = 0, running = false, onScreen = true, raf = 0;
   function frame(now) {
     raf = 0; if (!running) return;
-    const dt = Math.min((now - last) / 1000 || 1 / 60, 1 / 30); last = now;
+    const dt = Math.min(Math.max(0.001, (now - last) / 1000 || 1 / 60), 1 / 30); last = Math.max(last, now);
     const h = dt / S.steps; for (let s = 0; s < S.steps; s++) sub(h);
     draw(); raf = requestAnimationFrame(frame);
   }
