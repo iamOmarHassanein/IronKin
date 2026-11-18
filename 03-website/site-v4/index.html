@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRONKIN · Train in it</title>
+<meta name="description" content="IRONKIN Collection 001, filmed in the gym. Egyptian sportswear for strength, jiu-jitsu and padel.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="brand/ironkin-symbol-bone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="media/hero-reel-poster.webp">
+<link rel="stylesheet" href="assets/v4.css?v=1">
+</head>
+<body>
+<a class="skip" href="#kit">Skip to the kit</a>
+
+<header class="nav" id="nav">
+  <a class="logo" href="#top" aria-label="IRONKIN, back to top"><img src="brand/ironkin-symbol-bone.svg" alt="" width="40" height="22"><img src="brand/ironkin-wordmark-bone.svg" alt="IRONKIN" width="104" height="18"></a>
+  <nav class="links" aria-label="Main"><a href="#kit">The kit</a><a href="#train">Disciplines</a><a href="#story">Story</a></nav>
+  <button class="btn btn-lemon bag-btn" type="button" aria-haspopup="dialog">Bag <span class="bag-n">0</span></button>
+</header>
+
+<main>
+  <!-- 1. Video hero: plays full screen, then shrinks into a frame as you scroll -->
+  <section class="hero" id="top" aria-label="IRONKIN Collection 001 film">
+    <div class="hero-pin">
+      <div class="vid-frame">
+        <video class="vid" id="vid" muted loop playsinline preload="metadata" poster="media/hero-reel-poster.webp" aria-label="IRONKIN athletes training in Collection 001 in the gym"></video>
+        <div class="vid-shade" aria-hidden="true"></div>
+      </div>
+      <div class="hero-copy">
+        <p class="kicker"><span class="rec" aria-hidden="true"></span>Collection 001 · Filmed in the gym</p>
+        <h1 class="hero-title"><span class="ln">Train</span><span class="ln lemon">in it.</span></h1>
+      </div>
+      <div class="hero-side" aria-hidden="true">
+        <p>Five pieces.<br> Three disciplines.<br> <b>One kin.</b></p>
+      </div>
+      <div class="hero-ctrl">
+        <button class="vbtn" id="vplay" type="button" aria-label="Pause the film" aria-pressed="false"><svg viewBox="0 0 24 24" class="i-pause"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg><svg viewBox="0 0 24 24" class="i-play"><path d="M8 5l11 7-11 7z"/></svg></button>
+        <a class="scroll-cue" href="#kit"><span>Scroll</span><i aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Ticker that runs with your scroll -->
+  <div class="ticker" aria-hidden="true"><div class="ticker-row" id="tick"></div></div>
+
+  <!-- 3. The kit -->
+  <section class="kit" id="kit" aria-labelledby="kit-title">
+    <div class="sec-head">
+      <p class="label">01 / The kit</p>
+      <h2 class="display" id="kit-title">Built for the <span class="lemon">bar</span>,<br>the mat, the court.</h2>
+      <p class="sec-note">Heavy cotton, cream overlock on every seam, the split-anvil on the chest. Turn any piece to see the back.</p>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- 4. Disciplines: big rows, the photo follows your pointer -->
+  <section class="train" id="train" aria-labelledby="train-title">
+    <div class="sec-head">
+      <p class="label">02 / Disciplines</p>
+      <h2 class="display" id="train-title">Three ways<br>to <span class="lemon">earn it.</span></h2>
+    </div>
+    <ul class="rows">
+      <li class="row" data-img="media/c-strength.webp"><a href="#cards" data-go="hoodie"><span class="row-n">01</span><span class="row-t">Strength</span><span class="row-p">Signature Hoodie · Wide-Leg Pant</span><img class="row-img" src="media/c-strength.webp" alt="Strength athlete in the Signature Hoodie and Wide-Leg Pant in the gym" loading="lazy"></a></li>
+      <li class="row" data-img="media/c-jiujitsu.webp"><a href="#cards" data-go="comp"><span class="row-n">02</span><span class="row-t">Jiu-Jitsu</span><span class="row-p">Compression Tee</span><img class="row-img" src="media/c-jiujitsu.webp" alt="Jiu-jitsu athlete in the Compression Tee" loading="lazy"></a></li>
+      <li class="row" data-img="media/c-padel.webp"><a href="#cards" data-go="tee"><span class="row-n">03</span><span class="row-t">Padel</span><span class="row-p">Fitted Tee · Flared Pant</span><img class="row-img" src="media/c-padel.webp" alt="Padel player in the Fitted Tee and Flared Pant" loading="lazy"></a></li>
+    </ul>
+    <div class="cursor-img" id="cimg" aria-hidden="true"><img alt=""></div>
+  </section>
+
+  <!-- 5. Numbers -->
+  <section class="nums" aria-label="Collection 001 in numbers">
+    <div><b data-count="1" data-pad="3">001</b><span>Collection</span></div>
+    <div><b data-count="5">5</b><span>Pieces</span></div>
+    <div><b data-count="3">3</b><span>Disciplines</span></div>
+    <div><b data-count="1">1</b><span>Kin</span></div>
+  </section>
+
+  <!-- 6. Story -->
+  <section class="story" id="story" aria-labelledby="story-title">
+    <figure class="story-img"><img src="media/c-story-flag.webp" alt="Three IRONKIN athletes holding the IRONKIN flag" loading="lazy"><figcaption>Cairo · Collection 001</figcaption></figure>
+    <div class="story-txt">
+      <p class="label">03 / Story</p>
+      <h2 class="display" id="story-title">Made by the people<br>who <span class="lemon">train.</span></h2>
+      <p>IRONKIN is an Egyptian sportswear brand shaped by lifters, grapplers and padel players. We test every piece where it will be worn: under the bar, on the mat, on the court. If it doesn't hold up there, it doesn't ship.</p>
+      <a class="btn btn-lemon" href="#kit">Shop the kit</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-mark" aria-hidden="true"></div>
+  <div class="foot-row">
+    <a href="#kit">The kit</a><a href="#train">Disciplines</a><a href="#story">Story</a>
+    <span>Preview site · prices and checkout open at launch</span>
+  </div>
+</footer>
+
+<div class="drawer" id="bag" role="dialog" aria-modal="true" aria-labelledby="bag-title" hidden>
+  <div class="scrim" data-close></div>
+  <aside class="sheet">
+    <div class="sheet-head"><h2 id="bag-title">Your bag</h2><button class="btn btn-ghost" type="button" data-close>Close</button></div>
+    <div class="bag-lines"></div>
+    <p class="bag-note">Checkout opens when the store launches. Your bag is kept in this browser.</p>
+  </aside>
+</div>
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+<script src="assets/v4.js?v=1"></script>
+</body>
+</html>
