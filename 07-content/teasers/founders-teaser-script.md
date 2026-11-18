@@ -44,6 +44,9 @@ Alternative: AI voices generated with the clips (more credits, and the voices wo
 - `raw/`: the three Kling 3.0 clips (8 s each), the empty set, and each founder's seated frame (Nano Banana 2.1).
 - `edit/`: `edit.py` and `cues.json` rebuild both cuts (subtitle timing, trims, vertical crop). Needs Pillow, arabic-reshaper, python-bidi and imageio-ffmpeg.
 
+- `ironkin-founders-teaser-wide-voice.mp4` and `-vertical-voice.mp4`: the same cuts with **placeholder voices** (Microsoft's free Egyptian Arabic voice "Shakir", a different pitch and pace per founder), light room echo, room tone, a low drone and a hit on the end card. `edit/voices.py` makes the lines, `edit/mix.py` mixes them in (`raw/vo/` holds the trimmed lines).
+- To use the founders' real voices: record each line, trim the silence, save them over the files in `raw/vo/` with the same names, and run `mix.py` again. Same timings.
+
 The video files stay out of git (the repo ignores raw footage); they live in this folder.
 
 ### Voice-over timing (record and lay these in)
