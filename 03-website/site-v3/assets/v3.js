@@ -36,7 +36,10 @@
     top: `<svg viewBox="0 0 200 60" aria-hidden="true">${HOOK}<path d="M100 26 C 78 30 34 44 10 52 Q4 55 9 58 L191 58 Q196 55 190 52 C 166 44 122 30 100 26 Z" fill="url(#k-wood)"/></svg>`,
     bottom: `<svg viewBox="0 0 200 60" aria-hidden="true">${HOOK}<rect x="6" y="28" width="188" height="10" rx="2" fill="url(#k-wood)"/><rect x="22" y="36" width="12" height="22" rx="1.5" fill="url(#k-brass)"/><rect x="166" y="36" width="12" height="22" rx="1.5" fill="url(#k-brass)"/></svg>`,
   };
-  const wHTML = (it, big) => `<div class="w ${it.hanger}">${HANG[it.hanger]}<img src="${it.img}${big ? "" : "-sm"}.webp" alt="" draggable="false"></div>`;
+  // The garment body sits under the hanger so it can trail behind it; the sheen layer is masked to the
+  // garment's own shape and carries the light and the shadow the hanger casts on the shoulders.
+  const wHTML = (it, big) => { const src = `${it.img}${big ? "" : "-sm"}.webp`;
+    return `<div class="w ${it.hanger}">${HANG[it.hanger]}<div class="body"><img src="${src}" alt="" draggable="false"><i class="sheen" style="--m:url('${new URL(src, location.href).href}')"></i></div></div>`; };
 
   // ---------------------------------------------------------------- band
   const seq = ["IRONKIN", "•", "COLLECTION 001", "•", "STRENGTH", "•", "JIU-JITSU", "•", "PADEL", "•"];
@@ -89,15 +92,82 @@
     layout();
   }
   const baseX = (k) => (k - (N - 1) / 2) * slot;
+
+  // ---- physics. Each hanger has a spring for its place on the rail, a spring for its turn
+  // (slightly under-damped, so it settles with a soft overshoot like a real hanger on a hook),
+  // and a pendulum that swings when its hook accelerates: when it slides, when the whole rail
+  // glides, or when the pointer brushes past. The cloth body trails the swing a little.
+  const RAD = 180 / Math.PI, SIDE = -74;
+  const SP = { x: [95, 0.86], a: [70, 0.62], r: [48, 0.95] }; // [stiffness, damping ratio]
+  const GRAV = 5200, SWING_DAMP = 3.4, MAX_TH = 0.12, COUPLE = 0.26; // COUPLE: how much of the hook's push reaches the cloth
+  const S = G.map((g) => ({ g, w: g.firstElementChild, body: g.querySelector(".body"), x: 0, vx: 0, tx: 0, a: SIDE, va: 0, ta: SIDE, th: 0, vth: 0 }));
+  const R = { x: 0, v: 0, t: 0 };
+  const B = { w: null, body: null, a: 0, va: 0, ta: 0, th: 0, vth: 0 }; // the lifted piece
+  const sp = (o, p, v, t, [k, z], dt) => { o[v] += (-k * (o[p] - t) - 2 * z * Math.sqrt(k) * o[v]) * dt; o[p] += o[v] * dt; };
+  const pend = (o, acc, L, dt) => {
+    o.vth += (-(GRAV / L) * Math.sin(o.th) - SWING_DAMP * o.vth - (COUPLE * acc / L) * Math.cos(o.th)) * dt;
+    o.th = Math.max(-MAX_TH, Math.min(MAX_TH, o.th + o.vth * dt));
+  };
+  function draw(o, x) {
+    const lag = Math.max(-5, Math.min(5, -o.vth * 4.2 - o.va * 0.012)); // cloth trails the hanger
+    const face = Math.cos(o.a / RAD); // 1 facing you, about .28 edge-on
+    o.w.style.transform = `rotateZ(${o.th * RAD}deg) rotateY(${o.a}deg)`;
+    o.body.style.transform = `skewX(${lag}deg)`;
+    o.w.style.setProperty("--dk", ((1 - face) * 0.5).toFixed(3));
+    o.w.style.setProperty("--lx", (58 + o.a * 0.55 - o.th * RAD * 2.2).toFixed(1) + "%");
+    if (x != null) o.g.style.transform = `translate3d(${x}px,0,0)`;
+  }
+  function sim(dt) {
+    const rv = R.v; sp(R, "x", "v", R.t, SP.r, dt); const rAcc = (R.v - rv) / dt;
+    const L = gw * 0.7;
+    for (const s of S) {
+      const v0 = s.vx; sp(s, "x", "vx", s.tx, SP.x, dt); sp(s, "a", "va", s.ta, SP.a, dt);
+      pend(s, (s.vx - v0) / dt + rAcc, L, dt);
+    }
+    if (B.w) { sp(B, "a", "va", B.ta, SP.a, dt); pend(B, 0, L * 1.6, dt); }
+  }
+  const restful = (o) => Math.abs(o.vth) < 0.004 && Math.abs(o.th) < 0.002 && Math.abs(o.va) < 0.05 && Math.abs(o.a - o.ta) < 0.05;
+  let raf = 0, last = 0;
+  function tick(t) {
+    const dt = Math.min(0.05, (t - last) / 1000 || 0.016); last = t;
+    for (let n = Math.ceil(dt / (1 / 240)), h = dt / n; n--;) sim(h);
+    rack.style.transform = `translate3d(${R.x}px,0,0)`;
+    let calm = Math.abs(R.v) < 0.05 && Math.abs(R.x - R.t) < 0.05;
+    for (const s of S) { draw(s, s.x); calm = calm && restful(s) && Math.abs(s.vx) < 0.05 && Math.abs(s.x - s.tx) < 0.05; }
+    if (B.w) { draw(B); calm = calm && restful(B); }
+    raf = calm ? 0 : requestAnimationFrame(tick);
+  }
+  function kick() {
+    if (reduced) { // no motion: jump to rest
+      R.x = R.t; R.v = 0; rack.style.transform = `translate3d(${R.x}px,0,0)`;
+      for (const s of S) { Object.assign(s, { x: s.tx, vx: 0, a: s.ta, va: 0, th: 0, vth: 0 }); draw(s, s.x); }
+      if (B.w) { Object.assign(B, { a: 0, va: 0, th: 0, vth: 0 }); draw(B); }
+      return;
+    }
+    if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
+  }
+  // The pointer brushing past a piece nudges it, in the direction the pointer travels.
+  let px = null, pt = 0;
+  stage.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse" || open >= 0) return;
+    const now = e.timeStamp, vx = px == null ? 0 : (e.clientX - px) / Math.max(8, now - pt) * 1000; px = e.clientX; pt = now;
+    const g = e.target.closest(".g"); if (!g || reduced) return;
+    const s = S[+g.dataset.k]; s.vth = Math.max(-1.4, Math.min(1.4, s.vth - vx * 0.00042)); kick();
+  });
+  // A soft settle when the rail first comes into view.
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { S.forEach((s, k) => (s.vth = (k % 2 ? -1 : 1) * (0.18 + 0.05 * (k % 3)))); kick(); o.disconnect(); } }, { threshold: 0.35 }).observe(stage);
+
   function layout() {
     G.forEach((g, k) => {
-      const x = baseX(k) + (hov >= 0 && k !== hov ? Math.sign(k - hov) * gap : 0);
-      g.style.left = x + "px"; g.classList.toggle("face", k === hov);
+      S[k].tx = baseX(k) + (hov >= 0 && k !== hov ? Math.sign(k - hov) * gap : 0);
+      S[k].ta = k === hov ? 0 : SIDE; g.classList.toggle("face", k === hov);
     });
     // When the rail is wider than the screen, keep the faced piece in view.
     const span = (N - 1) * slot + 2 * gap + gw + 60, room = Math.max(0, (span - W) / 2);
     const off = hov >= 0 ? Math.max(-room, Math.min(room, -baseX(hov))) : 0;
-    rack.style.transform = `translateX(${W / 2 + off}px)`;
+    R.t = W / 2 + off;
+    if (!R.init) { R.init = true; R.x = R.t; S.forEach((s) => (s.x = s.tx)); }
+    kick();
     if (hov >= 0) {
       const it = ITEMS[hov];
       cap.style.left = W / 2 + off + baseX(hov) + "px";
@@ -155,11 +225,19 @@
     const g = G[k].getBoundingClientRect(), b = big.getBoundingClientRect();
     return `translate(${g.left + g.width / 2 - (b.left + b.width / 2)}px, ${g.top + g.height * 0.04 - (b.top + b.height * 0.04)}px) scale(${g.width / b.width})`;
   }
+  // The lifted piece keeps hanging: it sways as it arrives and turns a little toward the pointer.
+  function bindBig(v) { B.w = big.querySelector(".w"); B.body = big.querySelector(".body"); Object.assign(B, { a: 0, va: 0, ta: 0, th: 0, vth: reduced ? 0 : v }); draw(B); kick(); }
+  det.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse" || open < 0 || !B.w || reduced) return;
+    const r = big.getBoundingClientRect(), f = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / r.width));
+    B.ta = f * 14; B.vth -= (e.movementX || 0) * 0.0012; kick();
+  });
+  det.addEventListener("pointerleave", () => { B.ta = 0; kick(); });
   function openG(k) {
     if (open >= 0) return;
     open = k; hov = k; layout(); placeBig();
     big.getAnimations().forEach((a) => a.cancel());
-    big.innerHTML = wHTML(ITEMS[k], true); fill(k);
+    big.innerHTML = wHTML(ITEMS[k], true); fill(k); bindBig(0.42);
     sec.classList.add("open"); det.setAttribute("aria-hidden", "false");
     big.animate([{ transform: fromRail(k), opacity: 1 }, { transform: "none", opacity: 1 }], { duration: reduced ? 1 : 750, easing: EASE, fill: "forwards" });
     G[k].style.visibility = "hidden";
@@ -172,7 +250,7 @@
     big2.innerHTML = wHTML(ITEMS[from], true);
     big2.animate([{ transform: "none", opacity: 1, filter: "blur(0)" }, { transform: `translateX(${-d * 120}px) scale(.94)`, opacity: 0, filter: "blur(6px)" }], { duration: reduced ? 1 : 600, easing: EASE });
     big.getAnimations().forEach((a) => a.cancel());
-    big.innerHTML = wHTML(ITEMS[open], true);
+    big.innerHTML = wHTML(ITEMS[open], true); bindBig(d * 0.6);
     big.animate([{ transform: `translateX(${d * 120}px) scale(.94)`, opacity: 0, filter: "blur(6px)" }, { transform: "none", opacity: 1, filter: "blur(0)" }], { duration: reduced ? 1 : 600, easing: EASE, fill: "forwards" });
   }
   function closeG() {
@@ -183,7 +261,7 @@
     const back = fromRail(k); big.style.opacity = "";
     big.animate([{ transform: "none", opacity: 1 }, { transform: back, opacity: 1 }], { duration: reduced ? 1 : 650, easing: EASE, fill: "forwards" });
     sec.classList.remove("open"); det.setAttribute("aria-hidden", "true");
-    setTimeout(() => { G[k].style.visibility = ""; big.getAnimations().forEach((a) => a.cancel()); open = -1; hov = -1; layout(); stage.focus({ preventScroll: true }); }, reduced ? 0 : 650);
+    setTimeout(() => { G[k].style.visibility = ""; big.getAnimations().forEach((a) => a.cancel()); open = -1; hov = -1; B.w = null; layout(); stage.focus({ preventScroll: true }); }, reduced ? 0 : 650);
   }
   $("#prev").addEventListener("click", () => step(-1));
   $("#next").addEventListener("click", () => step(1));
@@ -203,7 +281,7 @@
   }));
   if ("ResizeObserver" in window) new ResizeObserver(() => { size(); if (open >= 0) placeBig(); }).observe(stage); else addEventListener("resize", size);
   size();
-  window.__rail = { openG, step, closeG, setHov(k) { hov = k; layout(); } };
+  window.__rail = { openG, step, closeG, setHov(k) { hov = k; layout(); }, S, B, R, run(ms) { for (let i = 0; i < ms / 4; i++) sim(0.004); tick(performance.now()); } };
 
   // ---------------------------------------------------------------- scroll reveals
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.18 });
