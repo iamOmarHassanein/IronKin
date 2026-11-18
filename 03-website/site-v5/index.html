@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="media/layer-plate.webp" media="(min-width: 821px)">
 <link rel="preload" as="image" href="media/layer-plate-sm.webp" media="(max-width: 820px)">
-<link rel="stylesheet" href="assets/v5.css?v=1">
+<link rel="stylesheet" href="assets/v5.css?v=2">
 </head>
 <body>
 <a class="skip" href="#collection">Skip to the collection</a>
@@ -31,9 +31,12 @@
       <h1 class="word" id="word" aria-label="Earn your Iron"><span>I</span><span>r</span><span>o</span><span>n</span></h1>
     </div>
     <div class="layer front" id="front">
-      <picture><source media="(max-width: 820px)" srcset="media/layer-man-sm.webp"><img src="media/layer-man.webp" alt="An athlete in the IRONKIN Signature Hoodie, seen from behind, at a rooftop railing over Cairo at night in the rain" id="man"></picture>
+      <picture><source media="(max-width: 820px)" srcset="media/layer-man-sm.webp"><img src="media/layer-man.webp" alt="An athlete in the IRONKIN Signature Hoodie, seen from behind, at a rooftop railing over Cairo at night in the rain, next to the IRONKIN flag on a gold stand" id="man"></picture>
     </div>
+    <!-- Opening film: he faces us, plants the IRONKIN flag, and walks to the railing. Its last frame is the scene above. -->
+    <video class="layer film" id="film" muted playsinline preload="auto" poster="media/intro-film-poster.webp" aria-hidden="true"></video>
   </div>
+  <button class="skip-intro" id="skipIntro" type="button">Skip intro</button>
 
   <!-- Opening doors: burgundy lacquer, gold seam, and the split-anvil that splits as they open -->
   <div class="doors" id="doors" aria-hidden="true">
@@ -97,6 +100,6 @@
 </div>
 <p class="toast" id="toast" role="status" aria-live="polite"></p>
 
-<script src="assets/v5.js?v=1"></script>
+<script src="assets/v5.js?v=3"></script>
 </body>
 </html>
