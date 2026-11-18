@@ -7,7 +7,6 @@
   const still = /[?&]still\b/.test(location.search);
   const reduced = still || matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (still) document.documentElement.classList.add("still");
-  const phone = () => innerWidth <= 760;
 
   // ---------------------------------------------------------------- catalog
   // price: null shows "Price at launch". Set a number (EGP) when prices are final.
@@ -24,8 +23,7 @@
   // ---------------------------------------------------------------- 1. video hero
   // The film plays muted on a loop. Phones get a portrait cut. It pauses off screen and on request.
   const vid = $("#vid"), vbtn = $("#vplay"), pin = $(".hero-pin"), heroSec = $(".hero"), nav = $("#nav");
-  vid.src = phone() ? "media/hero-reel-m.mp4" : "media/hero-reel.mp4";
-  if (phone()) vid.poster = "media/hero-reel-m-poster.webp";
+  vid.src = "media/hero-film.mp4"; // one 16:9 film; phones show its centre crop
   let userPaused = reduced;
   const setBtn = () => { const p = vid.paused; vbtn.setAttribute("aria-pressed", p); vbtn.setAttribute("aria-label", p ? "Play the film" : "Pause the film"); };
   const play = () => { if (!userPaused) vid.play().catch(() => {}); };

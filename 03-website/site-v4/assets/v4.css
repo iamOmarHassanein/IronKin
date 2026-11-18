@@ -186,6 +186,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .links { display: none; }
   .logo img + img { width: 88px; }
   .hero { height: 190svh; }
+  .vid { object-position: 62% 50%; }
   .vid-frame { clip-path: inset(calc(var(--p) * 13svh) calc(var(--p) * 5vw) calc(var(--p) * 30svh) calc(var(--p) * 5vw) round calc(var(--p) * 18px)); }
   .hero-copy { bottom: calc(96px + var(--p) * 2svh); }
   .hero-side { left: var(--gut); right: var(--gut); top: auto; bottom: 90px; width: auto; transform: translateY(calc((1 - var(--p)) * 40px)); font-size: 30px; }

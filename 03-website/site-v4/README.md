@@ -24,7 +24,7 @@ Then open http://localhost:4175.
 
 ## The film
 
-`media/hero-reel.mp4` (16:9) and `media/hero-reel-m.mp4` (9:16) are **stand-ins** cut from the campaign stills with slow camera moves, made by `make_reel.py`. Replace them with real or generated footage of the same names (keep them short, muted, under about 4 MB) and update the `-poster.webp` frames.
+`media/hero-film.mp4` is a 5-second Kling 3.0 clip (Higgsfield, image-to-video from the gym photo `c-strength.webp`), cut into a seamless 4.3-second loop: the last 0.8 s dissolves into the start. Phones show its centre crop. `hero-film-poster.webp` is its first frame and shows while it loads. To replace it, keep the same file names, keep it muted and under about 4 MB.
 
 ## Edit
 
