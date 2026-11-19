@@ -1,0 +1,15 @@
+{
+  "logo": "C:/Users/Admin/Desktop/IronKin/03-website/source-v2/logo-lockup.png",
+  "vcrop_x": 0.36,
+  "clips": [
+    { "file": "../raw/omar.mp4", "ss": 0.3, "dur": 7.7, "name": "Omar", "name_in": 1.0, "name_out": 3.4,
+      "subs": [ { "ar": "أهلاً.", "en": "Hi.", "t0": 4.3, "t1": 5.3 },
+                { "ar": "إحنا مش براند.", "en": "We're not a brand.", "t0": 5.7, "t1": 7.3 } ] },
+    { "file": "../raw/nour.mp4", "ss": 2.6, "dur": 5.4, "name": "Nour", "name_in": 0.3, "name_out": 2.1,
+      "subs": [ { "ar": "أهلاً.", "en": "Hi.", "t0": 2.4, "t1": 3.2 },
+                { "ar": "إحنا عيلة.", "en": "We're kin.", "t0": 3.6, "t1": 5.0 } ] },
+    { "file": "../raw/ahmed.mp4", "ss": 1.9, "dur": 6.1, "name": "Ahmed", "name_in": 0.5, "name_out": 2.6,
+      "subs": [ { "ar": "أهلاً.", "en": "Hi.", "t0": 3.1, "t1": 3.8 },
+                { "ar": "قريب… جداً.", "en": "Soon. Very soon.", "t0": 4.2, "t1": 5.7 } ] }
+  ]
+}
