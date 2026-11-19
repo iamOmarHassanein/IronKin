@@ -41,3 +41,6 @@ desktop.ini
 
 # Upscaled boards are a 25-minute regenerable intermediate (03-website/tools/upscale_boards.py)
 03-website/source-boards/upscaled/
+
+# Website films ship with the site (raw footage stays ignored above)
+!03-website/*/media/*.mp4

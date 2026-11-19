@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRONKIN · Collection 001</title>
+<meta name="description" content="IRONKIN Collection 001. Egyptian sportswear for strength, jiu-jitsu and padel.">
+<meta name="theme-color" content="#2A0A0D">
+<link rel="icon" href="brand/ironkin-symbol-bone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/v3.css?v=3">
+</head>
+<body>
+<a class="skip" href="#rail">Skip to the collection</a>
+
+<header class="nav" id="nav">
+  <a class="nav-logo" href="#top" aria-label="IRONKIN, back to top"><img src="brand/ironkin-symbol-bone.svg" alt="" width="46" height="25"><img src="brand/ironkin-wordmark-bone.svg" alt="IRONKIN" width="112" height="19"></a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="#rail">Collection 001</a><a href="#disciplines">Disciplines</a><a href="#story">Story</a>
+  </nav>
+  <button class="pill pill-ink bag-btn" type="button" aria-haspopup="dialog">Bag (<span class="bag-n">0</span>)</button>
+</header>
+
+<main>
+  <!-- 1. Flag hero: a real-time cloth you can grab -->
+  <section class="hero" id="top" aria-label="IRONKIN Collection 001">
+    <canvas class="cloth" id="cloth" role="img" aria-label="A burgundy IRONKIN flag with the cream split-anvil and wordmark. Grab it and pull it around."></canvas>
+    <img class="cloth-still" id="clothStill" alt="">
+    <div class="hero-copy">
+      <p class="eyebrow rise">Collection 001 · Egypt</p>
+      <h1 class="hero-title"><span class="rise">Forged</span><span class="rise soft">by those</span><span class="rise soft">who train.</span></h1>
+      <p class="hero-hint rise"><span class="dot" aria-hidden="true"></span>Grab the flag</p>
+    </div>
+    <a class="hero-scroll" href="#rail" aria-label="Scroll to the collection"><i aria-hidden="true"></i></a>
+  </section>
+
+  <!-- 2. Band -->
+  <div class="band" aria-hidden="true"><div class="band-track"></div></div>
+
+  <!-- 3. The rail -->
+  <section class="rail-sec" id="rail" aria-labelledby="rail-title">
+    <div class="rail-head dim">
+      <div><p class="eyebrow">The rail</p><h2 class="display" id="rail-title">Collection 001</h2></div>
+      <p class="rail-tip"><span class="t-ptr">Point to turn a piece. Click to lift it off the rail.</span><span class="t-touch">Swipe to turn a piece. Tap it again to lift it off the rail.</span></p>
+    </div>
+    <div class="stage" id="stage" tabindex="0" aria-label="Garment rail. Use the left and right arrow keys to turn pieces, Enter to lift one.">
+      <div class="rack dim" id="rack"><div class="bar" aria-hidden="true"></div></div>
+      <p class="cap dimmer" id="cap" aria-live="polite"><b></b><span></span></p>
+    </div>
+
+    <div class="det" id="det" aria-hidden="true">
+      <div class="det-hit" data-close></div>
+      <div class="big ghost" id="big2"></div>
+      <div class="big" id="big"></div>
+      <button class="arr" id="prev" type="button" aria-label="Previous piece"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="arr" id="next" type="button" aria-label="Next piece"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="info" id="info">
+        <p class="num" id="num">01 / 10</p>
+        <h3 class="pname" id="pname">Signature Hoodie</h3>
+        <p class="pmeta" id="pmeta">Black / Cream · Price at launch</p>
+        <div class="sizes" id="sizes" role="radiogroup" aria-label="Size"></div>
+        <button class="pill pill-cream add" id="add" type="button">Add to bag</button>
+        <p class="msg" id="msg" aria-live="polite"></p>
+      </div>
+      <button class="close-btn" id="close" type="button">Close</button>
+    </div>
+  </section>
+
+  <!-- 4. Disciplines -->
+  <section class="disc" id="disciplines" aria-labelledby="disc-title">
+    <div class="disc-head">
+      <p class="eyebrow">Three disciplines, one kin</p>
+      <h2 class="display" id="disc-title"><span class="reveal-line">Strength.</span> <span class="reveal-line">Jiu-Jitsu.</span> <span class="reveal-line serif">Padel.</span></h2>
+    </div>
+    <figure class="wide reveal-clip">
+      <picture><source media="(max-width: 700px) and (orientation: portrait)" srcset="media/hero-athletes-m.webp"><img src="media/hero-athletes.webp" alt="Three IRONKIN athletes on a burgundy floor crossed by a light line" loading="lazy"></picture>
+    </figure>
+    <div class="tiles">
+      <a class="tile" href="#rail" data-open="0"><div class="tile-img"><img src="media/c-strength.webp" alt="Strength athlete in the Signature Hoodie and Wide-Leg Pant" loading="lazy"></div><span class="tile-n">01</span><h3>Strength</h3><p>Signature Hoodie · Wide-Leg Pant</p></a>
+      <a class="tile" href="#rail" data-open="4"><div class="tile-img"><img src="media/c-jiujitsu.webp" alt="Jiu-jitsu athlete in the Compression Tee" loading="lazy"></div><span class="tile-n">02</span><h3>Jiu-Jitsu</h3><p>Compression Tee</p></a>
+      <a class="tile" href="#rail" data-open="6"><div class="tile-img"><img src="media/c-padel.webp" alt="Padel player in the Fitted Tee and Flared Pant" loading="lazy"></div><span class="tile-n">03</span><h3>Padel</h3><p>Fitted Tee · Flared Pant</p></a>
+    </div>
+  </section>
+
+  <!-- 5. Story -->
+  <section class="story" id="story" aria-labelledby="story-title">
+    <p class="eyebrow">Our story</p>
+    <h2 class="sr" id="story-title">Our story</h2>
+    <p class="words" id="words">IRONKIN is an Egyptian sportswear brand shaped by the people who train. Heavy cotton, cream overlock on every seam, and the split-anvil on the chest. Built for the bar, the mat and the court.</p>
+    <figure class="story-photo reveal-clip"><img src="media/c-story-flag.webp" alt="Three IRONKIN athletes holding the IRONKIN flag" loading="lazy"></figure>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-row">
+    <a href="#rail">Collection 001</a><a href="#disciplines">Disciplines</a><a href="#story">Story</a>
+    <span>Preview site · prices and checkout open at launch</span>
+  </div>
+  <img class="foot-mark" src="brand/ironkin-wordmark-bone.svg" alt="" aria-hidden="true">
+</footer>
+
+<div class="drawer" id="bag" role="dialog" aria-modal="true" aria-labelledby="bag-title" hidden>
+  <div class="drawer-scrim" data-close></div>
+  <aside class="drawer-sheet">
+    <div class="drawer-head"><h2 id="bag-title">Your bag</h2><button class="close-btn static" type="button" data-close>Close</button></div>
+    <div class="bag-lines"></div>
+    <p class="bag-note">Checkout opens when the store launches. Your bag is kept in this browser.</p>
+  </aside>
+</div>
+
+<script src="assets/v3.js?v=6"></script>
+<script src="assets/cloth.js?v=2"></script>
+</body>
+</html>
