@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRONKIN · All site versions</title>
+<style>
+  :root { --bg: #0B0708; --card: #160A0C; --line: rgba(241,232,220,.14); --cream: #F1E8DC; --mute: #A69A8C; --gold: #E2C07E; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--cream); font: 16px/1.5 system-ui, "Segoe UI", sans-serif; padding: clamp(24px, 5vw, 64px) 16px; }
+  main { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: clamp(28px, 4vw, 44px); letter-spacing: -.02em; margin-bottom: 6px; }
+  p.sub { color: var(--mute); margin-bottom: 32px; }
+  ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  a { display: grid; gap: 6px; padding: 20px; min-height: 150px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: inherit; text-decoration: none; transition: border-color .2s, transform .2s; }
+  a:hover, a:focus-visible { border-color: var(--gold); transform: translateY(-2px); outline: none; }
+  .v { font-size: 13px; color: var(--gold); letter-spacing: .14em; text-transform: uppercase; }
+  .t { font-size: 20px; font-weight: 600; }
+  .d { color: var(--mute); font-size: 14px; }
+  .u { margin-top: auto; font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: var(--cream); opacity: .8; }
+</style>
+</head>
+<body>
+<main>
+  <h1>IRONKIN · all site versions</h1>
+  <p class="sub">Each version runs from its own branch. Start everything with <b>start-all-sites.bat</b> in this folder.</p>
+  <ol>
+    <li><a href="http://localhost:4172"><span class="v">v1 · main</span><span class="t">Current live site</span><span class="d">The site on main, as it is today.</span><span class="u">localhost:4172</span></a></li>
+    <li><a href="http://localhost:4173"><span class="v">v2 · feat/site-v2</span><span class="t">Pre-homepage + rail</span><span class="d">Athlete hero, then Collection 001 on the hanger rail.</span><span class="u">localhost:4173</span></a></li>
+    <li><a href="http://localhost:4174"><span class="v">v3 · feat/site-v3</span><span class="t">Flag &amp; rail (burgundy, cream, black)</span><span class="d">Grab-able cloth flag, physical hanger rail, lift-off detail.</span><span class="u">localhost:4174</span></a></li>
+    <li><a href="http://localhost:4175"><span class="v">v4 · feat/site-v4</span><span class="t">Train in it (citrus lemon)</span><span class="d">Gym film hero that shrinks into a frame, flip cards, disciplines.</span><span class="u">localhost:4175</span></a></li>
+    <li><a href="http://localhost:4176"><span class="v">v5 · feat/site-v5</span><span class="t">Earn your Iron (gold)</span><span class="d">Doors, model plants the flag, giant word behind him, rain.</span><span class="u">localhost:4176</span></a></li>
+    <li><a href="http://localhost:4177"><span class="v">v6 · feat/site-v6</span><span class="t">The Rite (red light)</span><span class="d">Editorial temple: four chapters, embers, ruled collection.</span><span class="u">localhost:4177</span></a></li>
+  </ol>
+</main>
+</body>
+</html>
