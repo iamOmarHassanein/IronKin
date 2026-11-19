@@ -79,7 +79,14 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var
 
 /* start states while the intro waits, so nothing flashes */
 .intro .nav, .intro .word span, .intro .kicker, .intro .cue { opacity: 0; }
-.intro .front { transform: translateY(66%); }
+.intro .nav { pointer-events: none; }
+/* opening film sits over the whole scene until its last frame hands over to the layers */
+.film { z-index: 5; object-fit: cover; background: var(--night); }
+.film.gone { display: none; }
+.skip-intro { position: absolute; z-index: 9; right: max(18px, calc(125 * var(--u))); bottom: 24px; min-height: 40px; padding: 0 18px; border-radius: 999px; color: var(--cream); font-size: 13px; letter-spacing: .04em;
+  background: rgba(30, 5, 8, .4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: inset 0 0 0 1px rgba(226, 192, 126, .3); transition: opacity .5s, background .25s; }
+.skip-intro:hover { background: rgba(92, 15, 28, .6); }
+.skip-intro.gone { opacity: 0; pointer-events: none; }
 
 /* ---------------------------------------------------------------- sections */
 .label { font: 600 13px/1 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--gold); }

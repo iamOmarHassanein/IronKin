@@ -88,33 +88,68 @@
 
   // ---------------------------------------------------------------- intro
   let started = false;
-  const E = { out: "cubic-bezier(.2,.65,.3,1)", soft: "cubic-bezier(.45,0,.55,1)", rise: "cubic-bezier(.2,.5,.2,1)" };
+  const E = { out: "cubic-bezier(.2,.65,.3,1)", soft: "cubic-bezier(.45,0,.55,1)" };
   function anim(el, frames, delay, dur, easing) { return el.animate(frames, { delay, duration: dur, easing, fill: "both" }); }
+  // The opening film: the doors open on it, it plays once, and its last frame dissolves into the layered scene.
+  const film = $("#film"), skipBtn = $("#skipIntro"), doors = $("#doors");
+  // Where he is across the frame during the film (fraction of width, by seconds), so narrow screens can follow him.
+  const TRACK = [[0, 0.5], [1.6, 0.5], [3, 0.27], [5.6, 0.27], [7.4, 0.48], [10.1, 0.5]];
+  let finished = false, panAnim = null;
+  if (reduced) { film.classList.add("gone"); skipBtn.classList.add("gone"); } else film.src = "media/intro-film.mp4";
   function run() {
     if (started) return; started = true;
-    const doors = $("#doors");
-    if (reduced) { hero.classList.remove("intro"); doors.hidden = true; return; }
+    if (reduced) { hero.classList.remove("intro"); doors.hidden = true; setRain(true); return; }
     const [L, R] = $$(".door", doors);
     anim(L, [{ transform: "translateX(0)" }, { transform: "translateX(-101%)" }], 250, 1150, "cubic-bezier(.1,.2,.8,1)");
     anim(R, [{ transform: "translateX(0)" }, { transform: "translateX(101%)" }], 250, 1250, "cubic-bezier(.4,.6,.9,1)");
-    // The scene settles in from a slow, soft push.
-    anim($("#back"), [{ transform: "scale(1.14)", filter: "blur(6px) brightness(.7)" }, { transform: "scale(1)", filter: "blur(0) brightness(1)" }], 200, 2600, "cubic-bezier(.3,0,.2,1)");
-    anim($("#shade"), [{ opacity: 0 }, { opacity: 1 }], 1400, 900, E.soft);
-    setTimeout(() => setRain(true), 700);
-    anim(nav, [{ opacity: 0, transform: "translateY(-6px)" }, { opacity: 1, transform: "none" }], 1500, 400, "ease-out");
-    anim(kicker, [{ opacity: 0, transform: "translate(0, .5em)" }, { opacity: 1, transform: "translate(0,0)" }], 1550, 700, E.out);
-    spans.forEach((s, i) => anim(s, [{ opacity: 0, transform: "translateY(.14em)" }, { opacity: 1, transform: "none" }], 1500 + i * 70, 700, E.out));
-    anim(headline, [{ transform: "translateY(5%)" }, { transform: "none" }], 1900, 1800, "cubic-bezier(.3,0,.4,1)");
-    // The athlete rises into frame, overshoots a touch, and settles.
-    anim($("#front"), [{ transform: "translateY(66%)", offset: 0 }, { transform: "translateY(-2.2%)", offset: 0.64, easing: E.soft }, { transform: "translateY(0)", offset: 1 }], 2300, 3300, E.rise);
-    anim($(".cue"), [{ opacity: 0 }, { opacity: 1 }], 4200, 600, "ease-out");
-    setTimeout(() => { hero.classList.remove("intro"); doors.hidden = true; }, 5700);
+    setTimeout(() => { doors.hidden = true; }, 1600);
+    const p = film.play();
+    if (p && p.catch) p.catch(() => finish(true));   // autoplay refused: go straight to the scene
+    // Follow him across the frame where the screen is narrower than the scene, in step with the film itself.
+    const follow = () => {
+      if (finished) return;
+      const t = film.currentTime, sw = stage.offsetWidth, room = Math.max(0, (sw - hero.clientWidth) / 2);
+      let k = TRACK.length - 1; while (k > 0 && TRACK[k - 1][0] > t) k--;
+      const [t0, f0] = TRACK[Math.max(0, k - 1)], [t1, f1] = TRACK[k];
+      const u = t1 > t0 ? Math.min(1, Math.max(0, (t - t0) / (t1 - t0))) : 1, e = u * u * (3 - 2 * u);
+      const x = Math.max(-room, Math.min(room, (0.5 - (f0 + (f1 - f0) * e)) * sw));
+      stage.style.transform = `translateX(calc(-50% + ${x}px))`;
+      panAnim = requestAnimationFrame(follow);
+    };
+    follow();
+    film.addEventListener("timeupdate", () => { if (film.duration && film.currentTime > film.duration - 0.75) finish(false); });
+    film.addEventListener("ended", () => finish(false));
+    film.addEventListener("error", () => finish(true));
   }
-  // Start once the two scene layers are in, or after 4 s regardless.
+  function finish(fast) {
+    if (finished) return; finished = true;
+    skipBtn.classList.add("gone");
+    // Dissolve the film into the layers (they show the same frame), then bring in the word.
+    const fade = film.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fast ? 450 : 700, easing: "ease-in-out", fill: "forwards" });
+    fade.onfinish = () => { film.pause(); film.classList.add("gone"); };
+    if (panAnim) { cancelAnimationFrame(panAnim); panAnim = null; }
+    // Glide back to the centre the layers are drawn for.
+    const from = stage.style.transform;
+    stage.style.transform = "translateX(-50%)";
+    if (from && from !== "translateX(-50%)") stage.animate([{ transform: from }, { transform: "translateX(-50%)" }], { duration: 700, easing: "ease-in-out" });
+    if (fast) doors.hidden = true;
+    setRain(true);
+    const b = fast ? 0 : 300;
+    anim($("#shade"), [{ opacity: 0 }, { opacity: 1 }], b, 900, E.soft);
+    anim(nav, [{ opacity: 0, transform: "translateY(-6px)" }, { opacity: 1, transform: "none" }], b + 200, 400, "ease-out");
+    anim(kicker, [{ opacity: 0, transform: "translate(0, .5em)" }, { opacity: 1, transform: "translate(0,0)" }], b + 300, 700, E.out);
+    spans.forEach((s, i) => anim(s, [{ opacity: 0, transform: "translateY(.14em)" }, { opacity: 1, transform: "none" }], b + 250 + i * 70, 700, E.out));
+    anim(headline, [{ transform: "translateY(5%)" }, { transform: "none" }], b + 500, 1800, "cubic-bezier(.3,0,.4,1)");
+    anim($(".cue"), [{ opacity: 0 }, { opacity: 1 }], b + 1600, 600, "ease-out");
+    setTimeout(() => hero.classList.remove("intro"), b + 2400);
+  }
+  skipBtn.addEventListener("click", () => { if (!started) run(); finish(true); });
+  // Start once the scene layers and the film are ready, or after 4 s regardless.
   const imgs = [$("#plate"), $("#man")];
-  const ready = () => imgs.every((i) => i.complete && i.naturalWidth);
+  const ready = () => imgs.every((i) => i.complete && i.naturalWidth) && (reduced || film.readyState >= 3);
   const kick = () => { layout(); if (ready()) setTimeout(run, 120); };
   imgs.forEach((i) => i.addEventListener("load", kick));
+  film.addEventListener("canplaythrough", kick);
   setTimeout(() => { layout(); run(); }, 4000);
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(kick);
   addEventListener("resize", layout);
@@ -181,5 +216,5 @@
   });
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.15 });
   $$(".tile, .story figure").forEach((el) => io.observe(el));
-  window.__v5 = { layout, run };
+  window.__v5 = { layout, run, finish };
 })();
