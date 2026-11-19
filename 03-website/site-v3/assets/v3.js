@@ -129,8 +129,9 @@
   const restful = (o) => Math.abs(o.vth) < 0.004 && Math.abs(o.th) < 0.002 && Math.abs(o.va) < 0.05 && Math.abs(o.a - o.ta) < 0.05;
   let raf = 0, last = 0;
   function tick(t) {
-    const dt = Math.min(0.05, (t - last) / 1000 || 0.016); last = t;
-    for (let n = Math.ceil(dt / (1 / 240)), h = dt / n; n--;) sim(h);
+    // The frame timestamp can be earlier than the time kick() recorded, so clamp to a small positive step.
+    const dt = Math.min(0.05, Math.max(0.001, (t - last) / 1000 || 0.016)); last = Math.max(last, t);
+    for (let n = Math.max(1, Math.ceil(dt / (1 / 240))), h = dt / n; n > 0; n--) sim(h);
     rack.style.transform = `translate3d(${R.x}px,0,0)`;
     let calm = Math.abs(R.v) < 0.05 && Math.abs(R.x - R.t) < 0.05;
     for (const s of S) { draw(s, s.x); calm = calm && restful(s) && Math.abs(s.vx) < 0.05 && Math.abs(s.x - s.tx) < 0.05; }
