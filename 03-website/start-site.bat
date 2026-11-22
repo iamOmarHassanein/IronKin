@@ -1,5 +1,7 @@
 @echo off
-rem Starts the IRONKIN site on http://localhost:4173 and opens it. Close this window to stop it.
-cd /d "%~dp0site"
-start "" http://localhost:4173
-python -m http.server 4173 --bind 127.0.0.1
+title IRONKIN v2 - http://localhost:4173
+rem Starts IRONKIN v2 on http://localhost:4173 and opens it once it is ready. Close this window to stop it.
+cd /d "%~dp0"
+where python >nul 2>nul || (echo Python is not installed. Get it from https://www.python.org/downloads/ ^(tick "Add to PATH"^), then try again. & pause & exit /b 1)
+python tools\serve.py site 4173
+if errorlevel 1 pause
