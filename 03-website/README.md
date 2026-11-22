@@ -1,3 +1,24 @@
+# How to open each website version
+
+You need a local copy of this repo (`git clone https://github.com/iamOmarHassanein/IronKin.git`, or `git pull` to update it) and **Python** for v2 to v6. Version 01 and 02 also need **Node.js** (LTS from nodejs.org).
+
+**Easiest:** double-click `03-website/open-ironkin-site.bat` and type the number.
+
+| Version | Double-click | Opens at | Needs |
+|---|---|---|---|
+| v2 (athlete opening + hanger rail) | `start-site.bat` | http://localhost:4173 | Python |
+| v3 (cloth flag) | `start-site-v3.bat` | http://localhost:4174 | Python |
+| v4 ("Train in it") | `start-site-v4.bat` | http://localhost:4175 | Python |
+| v5 ("Earn your Iron") | `start-site-v5.bat` | http://localhost:4176 | Python |
+| v6 ("The Rite") | `start-site-v6.bat` | http://localhost:4177 | Python |
+| version 01 (identity v6) | `start-version-01.bat` | http://localhost:5180 | Node.js (first run installs packages, about a minute) |
+| version 02 (night edition) | `start-version-02.bat` | http://localhost:5182 | Node.js (same) |
+| v2 to v6 side by side + hub | `previews/start-all-sites.bat` | http://localhost:4170 | Python |
+
+Each launcher waits until the site is ready before opening the browser, and if the site is already running (a window from last time is still open) it just opens it. **Keep the black window open while you browse; closing it stops the site.** Don't open the `index.html` files directly by double-clicking them: the films and scripts only load through these launchers.
+
+If a page says "This site can't be reached", the window for that version was closed: double-click its launcher again.
+
 # IRONKIN website (v2, Collection 001)
 
 Static site in `site/`. No build step.
