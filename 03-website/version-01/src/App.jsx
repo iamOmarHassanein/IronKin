@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createTimeline, stagger, svg, utils } from 'animejs';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,12 +11,13 @@ import DecryptedText from './bits/DecryptedText';
 import Magnet from './bits/Magnet';
 import Noise from './bits/Noise';
 import TargetCursor from './bits/TargetCursor';
+import Build from './Build';
 import GlareHover from './bits/GlareHover';
 import { ANVIL_D, ANVIL_VB, WORD_D, WORD_VB } from './logoPaths';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const A = (f) => `/assets/${f}`;
+const A = (f) => `assets/${f}`;
 const PIECES = [
   { no: '01', name: 'Wide-Leg Track Pant', who: 'Unisex', fabric: '380 gsm brushed fleece', grade: 4, img: 'piece-01.webp', cw: 'BLK / BONE' },
   { no: '02', name: 'Flare Track Pant', who: 'Women', fabric: '300 gsm brushed interlock', grade: 3, img: 'piece-02.webp', cw: 'ROSE / BURG' },
@@ -79,6 +81,7 @@ function Nav() {
         <a href="#collection" className="cursor-target" data-cursor-label="FRG-01">Collection 001</a>
         <a href="#floor" className="cursor-target">The Forge Floor</a>
         <a href="#spec" className="cursor-target">Spec</a>
+        <a href="#build" className="cursor-target" data-cursor-label="Behind the scenes">The build</a>
         <a href="#sessions" className="cursor-target">Sessions</a>
         <a href="#kin" className="cursor-target">The Kin</a>
       </nav>
@@ -87,12 +90,40 @@ function Nav() {
   );
 }
 
-function Hero() {
+/* preloader from version 02 (anime.js): draw the anvil, count to 100, lift away */
+function Preloader({ onDone }) {
+  const root = useRef(null);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { onDone(); return; }
+    const count = { v: 0 };
+    const [drawable] = svg.createDrawable('#loader-anvil');
+    const tl = createTimeline({ defaults: { ease: 'inOutQuart' }, onComplete: onDone });
+    tl.add(drawable, { draw: ['0 0', '0 1'], duration: 1300 }, 0)
+      .add(count, { v: 100, duration: 1500, ease: 'outQuad', modifier: utils.round(0),
+        onUpdate: () => { const el = root.current?.querySelector('.loader__count'); if (el) el.textContent = String(count.v).padStart(3, '0'); } }, 0)
+      .add('#loader-anvil', { fillOpacity: [0, 1], duration: 400 }, 1250)
+      .add('.loader__word span', { y: ['110%', '0%'], delay: stagger(40), duration: 600, ease: 'outExpo' }, 1100)
+      .add(root.current, { clipPath: ['inset(0 0 0% 0)', 'inset(0 0 100% 0)'], duration: 900, ease: 'inOutExpo' }, 2000);
+    return () => tl.pause();
+  }, [onDone]);
+  return (
+    <div className="loader" ref={root} aria-hidden="true">
+      <svg className="loader__anvil" viewBox={ANVIL_VB}><path id="loader-anvil" d={ANVIL_D} fillRule="evenodd" /></svg>
+      <div className="loader__word">{'IRONKIN'.split('').map((c, k) => <span key={k}>{c}</span>)}</div>
+      <div className="loader__count">000</div>
+    </div>
+  );
+}
+
+function Hero({ ready }) {
   const root = useRef(null);
   useGSAP(() => {
-    gsap.from('.hero__model', { yPercent: 8, opacity: 0, duration: 1.6, ease: 'expo.out', delay: 0.35 });
-    gsap.from('.hero__meta > *', { y: 24, opacity: 0, stagger: 0.08, duration: 1, ease: 'expo.out', delay: 0.9 });
-    gsap.from('.hero .corners i', { scale: 0, opacity: 0, stagger: 0.06, duration: 0.8, ease: 'back.out(2)', delay: 1.1 });
+    if (!ready) return;   // the hero's own entrance plays once the preloader has lifted
+    gsap.from('.hero__model', { yPercent: 8, opacity: 0, duration: 1.6, ease: 'expo.out', delay: 0.1 });
+    gsap.from('.hero__meta > *', { y: 24, opacity: 0, stagger: 0.08, duration: 1, ease: 'expo.out', delay: 0.6 });
+    gsap.from('.hero .corners i', { scale: 0, opacity: 0, stagger: 0.06, duration: 0.8, ease: 'back.out(2)', delay: 0.8 });
+  }, { scope: root, dependencies: [ready] });
+  useGSAP(() => {
     const tl = gsap.timeline({ scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true } });
     tl.to('.hero__type', { yPercent: -18, scale: 1.08, ease: 'none' }, 0)
       .to('.hero__model', { yPercent: 6, scale: 0.94, ease: 'none' }, 0)
@@ -101,7 +132,9 @@ function Hero() {
   return (
     <section className="hero" id="top" ref={root}>
       <div className="hero__type">
-        <SplitText text="IRONKIN" tag="h1" className="hero__h1" splitType="chars" delay={45} duration={1.4} trigger="load" textAlign="center" />
+        {ready
+          ? <SplitText text="IRONKIN" tag="h1" className="hero__h1" splitType="chars" delay={45} duration={1.4} trigger="load" textAlign="center" />
+          : <h1 className="hero__h1" style={{ visibility: 'hidden' }}>IRONKIN</h1>}
       </div>
       <div className="hero__stage">
         <img className="hero__model" src={A('model-hoodie.webp')} alt="Athlete in the IRONKIN heavyweight hoodie and wide-leg track pant" />
@@ -332,6 +365,8 @@ function Footer() {
 
 export default function App() {
   const [desktop, setDesktop] = useState(false);
+  const [ready, setReady] = useState(false);
+  const done = useCallback(() => setReady(true), []);
   useEffect(() => {
     const mq = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 900px)');
     const on = () => setDesktop(mq.matches); on(); mq.addEventListener('change', on);
@@ -348,14 +383,16 @@ export default function App() {
     <>
       {desktop && <TargetCursor cursorColor="#B3202B" spinDuration={3} blendMode="normal" size={34} cornerSize={10} thickness={2} />}
       <Noise opacity={0.06} fixed blendMode="multiply" zIndex={60} />
+      {!ready && <Preloader onDone={done} />}
       <Nav />
       <main>
-        <Hero />
+        <Hero ready={ready} />
         <Marquee />
         <Manifesto />
         <ForgeFloor />
         <Catalogue />
         <Spec />
+        <Build />
         <Sessions />
         <Kin />
       </main>

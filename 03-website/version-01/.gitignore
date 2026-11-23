@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# behind-the-scenes images live in public/assets/build (the repo root ignores build/ folders)
+!public/assets/build/
